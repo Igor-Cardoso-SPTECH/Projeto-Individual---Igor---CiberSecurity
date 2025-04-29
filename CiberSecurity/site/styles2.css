@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* Reset e base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: white;  
+    z-index: 1;
+    text-align: justify;
+}
+
+body {
+    background: black;
+    font-family: "Poppins", sans-serif;
+    overflow-x: hidden;
+    width: 100vw;
+
+}
+.title{   
+    z-index: 1;
+    text-align: center;
+    
+}
+
+/* Cabeçalho / Navbar */
+.header {
+    width: 100%;
+    background-color: none;
+    z-index: 10;
+    padding: 20px 40px;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #00ff0800;
+}
+
+.logo img {
+    height: 120px;
+    z-index: 3;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.menu li {
+    color: #00FF09;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+    z-index: 1;
+}
+
+.menu li:hover {
+    background-color: #1B8800;
+    color: white;
+}
+
+.agora {
+    background-color: #1B8800;
+    color: white;
+}
+
+/* Canvas Matrix (fundo animado) */
+.canvaMatrix {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
+.backgroundHacking {
+    
+    background-image: url(./img/background.1.png);
+    background-size: cover; /* cobre toda a largura e altura */
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100vw;
+    height: 100vh;
+}
+.oquehax{
+  padding-top: 60px;
+  padding-left: 30px;
+  font-size: 30px;
+}
+
+.texthaxs{
+    padding-top: 70px;
+    margin-left: 500px;
+    max-width: 800px;
+    text-align: justify;
+}
+
+.explicacao {
+    max-width: 1200px;
+    margin: 30px;
+    font-size: 25px;
+    line-height: 1.8;
+    text-align: left;
+    z-index: 1;
+    position: relative;
+    text-shadow: black ;
+}
+
+.subtext{
+    font-size: 20px;
+}
+.espaco{
+    padding: 80px;
+    background-color: #262626;
+}
+
+.center{
+text-align: center;
+font-size: 40px; 
+    color: #00FF09;
+    font-size: 60px;
+    font-weight: bold;
+    text-align: center;
+    
+}
+.motivacao_div{
+
+
+
+    
+}
+.text {
+    margin: 15px;
+}
+.textTitle{
+    margin: 15px;
+    margin-bottom: 80px;
+    font-size: 40px;
+    color: white;
+    font-weight: bolder;
+    justify-self: center;
+}
+.textGreen {
+    color: #00FF09;
+}
+.textDarkGreen {
+    color: #1B8800;
+}
+
+
+.perfisHax{
+z-index: 0;
+background-image: url(./img/tipos_hax.jpg);
+background-size: contain;
+background-repeat: no-repeat;
+background-color: #262626;
+}
+
+
+.footer {
+    background-color: #0f0f0f;
+    padding: 30px 0 0 0 ;
+    text-align: center;
+    border-top: 2px solid #00FF09;
+    margin-top: 90px;
+    position: relative;
+    z-index: 1;
+    width: 100vw; 
+    height: 150px;
+}
+
+.footer-container {
+    width: 100%; 
+    max-width: 1200px; 
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-logo {
+    height: 80px;
+}
+
+.footer p {
+    color: #ccc;
+    font-size: 16px;
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.footer-links li a {
+    color: #00FF09;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.footer-links li a:hover {
+    color: white;
+}

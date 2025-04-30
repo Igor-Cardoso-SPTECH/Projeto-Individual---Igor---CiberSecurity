@@ -69,7 +69,34 @@ body {
     color: white;
 }
 
-/* Canvas Matrix (fundo animado) */
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.video-background iframe {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+}
+.video-background::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* 0.5 = 50% de opacidade preta */
+    z-index: 1;
+}
+
 .canvaMatrix {
     position: fixed;
     top: 0;
@@ -130,10 +157,23 @@ font-size: 40px;
     
 }
 .motivacao_div{
+margin-left: 20px;
+max-width: 600px;
+}
 
+.perfis-hacker{
+    margin-left: 20px;
 
+}
 
-    
+.font-perfis-hack{
+    font-size: 40px;
+    font-weight: bolder;
+}
+
+.font-perfis-hack-hat{
+    font-size: 25px;
+    font-weight: bolder;
 }
 .text {
     margin: 15px;
@@ -141,7 +181,7 @@ font-size: 40px;
 .textTitle{
     margin: 15px;
     margin-bottom: 80px;
-    font-size: 40px;
+    font-size: 60px;
     color: white;
     font-weight: bolder;
     justify-self: center;

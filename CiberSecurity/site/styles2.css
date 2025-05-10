@@ -166,25 +166,6 @@ max-width: 600px;
 
 }
 
-.hacker-perfil {
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    gap: 10px; /* espaço entre imagem e texto */
-    margin: 20px 0;
-    font-size: 25px;
-    font-weight: bolder;
-    
-    color: #1B8800;
-}
-
-.ico-hat {
-    width: 150px;
-color: #00FF09;
-box-shadow: #00FF09;
-filter: drop-shadow(0 0 10px #1B8800);
-}
-
 .font-perfis-hack{
     font-size: 40px;
     font-weight: bolder;

@@ -163,6 +163,7 @@ max-width: 600px;
 
 .perfis-hacker{
     margin-left: 20px;
+    max-width: 800px;
 
 }
 
@@ -182,8 +183,39 @@ max-width: 600px;
     width: 150px;
 color: #00FF09;
 box-shadow: #00FF09;
-filter: drop-shadow(0 0 10px #1B8800);
+
 }
+
+.ico-hat-others{
+    width: 90px;
+    color: #00FF09;
+    box-shadow: #00FF09;
+}
+
+
+
+
+.shadow-red{
+    filter: drop-shadow(0 0 10px #880000);
+}
+.shadow-green{
+    filter: drop-shadow(0 0 10px #1B8800);
+}
+.shadow-white{
+    filter: drop-shadow(0 0 10px #ffffff);
+}
+.shadow-blue{
+    filter: drop-shadow(0 0 10px #0011ff);
+}
+.shadow-kiddies{
+    filter: drop-shadow(0 0 10px #00ffc0);
+}
+
+.shadow-orange{
+    filter: drop-shadow(0 0 10px #ffc000);
+
+}
+
 
 .font-perfis-hack{
     font-size: 40px;
@@ -193,7 +225,6 @@ filter: drop-shadow(0 0 10px #1B8800);
 .font-perfis-hack-hat{
     font-size: 25px;
     font-weight: bolder;
-    justify-content: center;
 }
 .text {
     margin: 15px;
@@ -213,9 +244,6 @@ filter: drop-shadow(0 0 10px #1B8800);
     color: #1B8800;
 }
 
-.div-hats{
-    margin-bottom: 20px;
-}
 
 .perfisHax{
 z-index: 0;

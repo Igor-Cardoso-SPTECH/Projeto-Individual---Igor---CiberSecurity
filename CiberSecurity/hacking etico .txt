@@ -1,6 +1,0 @@
-O que é hacking ético?
-O hacking ético é o uso de técnicas de hacking por agentes amigos na tentativa de descobrir, entender e corrigir vulnerabilidades de segurança em uma rede ou sistema de computador. 
-
-Os hackers éticos têm as mesmas habilidades e utilizam as mesmas ferramentas e táticas dos hackers mal-intencionados, mas seu objetivo é sempre melhorar a segurança da rede sem prejudicar a rede nem seus usuários.
-
-De muitas maneiras, o hacking ético é como um ensaio para os ataques cibernéticos do mundo real. As organizações contratam hackers éticos para lançar ataques simulados em suas redes de computadores. Durante esses ataques, os hackers éticos demonstram como os cibercriminosos reais invadem uma rede e os danos que podem causar uma vez lá dentro.

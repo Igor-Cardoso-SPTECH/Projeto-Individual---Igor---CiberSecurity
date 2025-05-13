@@ -1,0 +1,46 @@
+body {
+    background: black;
+    font-family: "Poppins", sans-serif;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+.textTitle {
+    text-align: center;
+    font-size: 48px;
+    color: #00FF09;
+    margin-bottom: 40px;
+}
+.espaco {
+    padding: 60px;
+}
+.hardware-section {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.hardware-card {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: center;
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px #00FF09;
+}
+.hardware-img {
+    width: 200px;
+    border-radius: 10px;
+}
+.textGreen {
+    color: #00FF09;
+}
+.shadow-green { filter: drop-shadow(0 0 10px #00FF09); }
+.shadow-white { filter: drop-shadow(0 0 10px #ffffff); }
+.shadow-red { filter: drop-shadow(0 0 10px #ff0000); }
+.shadow-blue { filter: drop-shadow(0 0 10px #0011ff); }
+.shadow-orange { filter: drop-shadow(0 0 10px #ffc000); }

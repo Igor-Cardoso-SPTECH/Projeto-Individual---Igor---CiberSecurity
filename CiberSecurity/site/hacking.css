@@ -306,3 +306,25 @@ background-color: #262626;
 .footer-links li a:hover {
     color: white;
 }
+.hardware-section {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.hardware-card {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: center;
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px #00FF09;
+}
+.hardware-img {
+    width: 200px;
+    border-radius: 10px;
+}

@@ -3,10 +3,7 @@ var database = require("../database/config");
 function buscarSenhasPorUsuario(email) {
 
   var instrucaoSql = `
-  select u.nome "Nome usuario", s.senha "Senhas Criadas" from usuario u
-  inner join senhas s
-  on s.usuario = u.id
-  where u.email = '${email}';`;
+  select * from usuario where email = '${email}';`;
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);

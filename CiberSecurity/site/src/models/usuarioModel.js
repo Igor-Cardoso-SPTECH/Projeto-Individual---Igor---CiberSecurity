@@ -21,8 +21,14 @@ function cadastrar(nome, email, senha, perfil) {
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
+function listar() {
+    var instrucaoSql = `SELECT * FROM usuario;`;
+    return database.executar(instrucaoSql);
+}
+
 
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    listar,
 };

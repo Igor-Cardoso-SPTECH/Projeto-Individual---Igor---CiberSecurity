@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Barlow', 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: black;
+
 }
 
 :root {
@@ -14,40 +14,51 @@ body {
   --tamanho-login: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
   --tamanho-footer: 65px;
 }
+.login {
+  position: relative;
+  height: var(--tamanho-login);
+  overflow: hidden;
+}
+
+
+
+.video-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.video-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-background::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1;
+}
+
+.login > *:not(.video-background) {
+  position: relative;
+  z-index: 2;
+}
 
 .container {
   display: flex;
   width: 80%;
   margin: auto;
-}
-
-.header {
-  height: var(--tamanho-header);
-  border-bottom: 2px solid #32b9cd;
-}
-
-.header .container {
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-}
-
-.header a {
-  text-decoration: none;
-  color: #e3b062;
-}
-
-.agora {
-  font-weight: 800;
-}
-
-.navbar {
-  width: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  list-style: none;
-  color: #e3b062;
 }
 
 .titulo {
@@ -56,35 +67,68 @@ body {
   font-weight: 500;
 }
 
-.header h1 {
-  margin: 0;
+.header {
+    width: 100%;
+    background-color: none;
+    z-index: 10;
+
 }
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #00ff0800;
+    margin: 10px;
+}
+
+.logo img {
+    height: 120px;
+    z-index: 3;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.menu li {
+    color: #00FF09;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+    z-index: 1;
+}
+.menu a {
+    color: #00FF09;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+    z-index: 1;
+   text-decoration: none;
+}
+
+.menu a:hover {
+    background-color: #1B8800;
+    color: white;
+}
+
+.agora {
+    background-color: #1B8800;
+    color: white;
+}
+
+
+
 
 /* BANNER */
 
-.banner {
-  height: var(--tamanho-banner);
-  color: white;
-  background-image: url('../assets/imgs/bg-jelly-fish-para-home.png');
-  background-size: cover;
-}
 
-.banner .container {
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-.banner .container p {
-  width: 50%;
-  margin: 0;
-  padding: 0;
-  font-size: 36px;
-}
-
-.banner .container span {
-  font-weight: 800;
-}
 
 /* MISSÃO VISÃO VALORES */
 
@@ -139,11 +183,7 @@ body {
 
 /* LOGIN */
 
-.login {
-  height: var(--tamanho-login);
-  background-image: url('../assets/imgs/bg-jelly-fish-para-home.png');
-  background-size: cover;
-}
+
 
 .login .container {
   justify-content: center;
@@ -153,15 +193,16 @@ body {
 
 .card {
   width: 50%;
-  background-color: #e5e5e5;
+  background-color: black;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  color: palevioletred;
+  color: #00FF09;
   flex-direction: column;
   height: fit-content;
   padding: 20px 0;
+   filter: drop-shadow(0 0 10px #00FF09);
 }
 
 .card h2 {
@@ -214,13 +255,29 @@ body {
   font-weight: 600;
   font-size: 18px;
   color: #fff;
-  background-color: #ED145B;
+  background-color: #1B8800;
   width: 120px;
   height: 30px;
   align-self: center;
   margin-top: 20px;
+  
 }
 
+.botao:hover  {
+  cursor: pointer;
+  font-family: "Barlow", sans-serif;
+  border: 0;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 18px;
+  color: #fff;
+  background-color: #00FF09;
+  width: 120px;
+  height: 30px;
+  align-self: center;
+  margin-top: 20px;
+  
+}
 .loading-div {
   width: 50px;
   display: none;
@@ -244,12 +301,12 @@ body {
 
 .card_erro {
   display: none;
-  background-color: #fff;
-  color: black;
+  background-color: black;
+  color: white;
   width: 230px;
   position: fixed;
   border-radius: 4px;
-  border: #ED145B 3px solid;
+  border: #00FF09 3px solid;
   padding: 10px;
   margin-right: 10%;
 }
@@ -359,4 +416,53 @@ input {
   50%  {transform: rotate(25deg)}
   75%  {transform: rotate(-25deg)}
   100% {transform: rotate(25deg)}
+}
+
+
+.footer {
+    background-color: #0f0f0f;
+    padding: 30px 0 0 0 ;
+    text-align: center;
+    border-top: 2px solid #00FF09;
+    position: relative;
+    z-index: 1;
+    height: 150px;
+}
+
+.footer-container {
+    width: 100%; 
+    max-width: 1200px; 
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-logo {
+    height: 80px;
+}
+
+.footer p {
+    color: #ccc;
+    font-size: 16px;
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.footer-links li a {
+    color: #00FF09;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.footer-links li a:hover {
+    color: white;
 }

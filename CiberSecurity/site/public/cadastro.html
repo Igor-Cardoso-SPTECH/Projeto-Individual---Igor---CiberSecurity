@@ -11,33 +11,34 @@
   <script src="./js/sessao.js"></script>
 
   <link rel="stylesheet" href="./css/estilo.css" />
-  <link rel="icon" href="./assets/icon/favicon2.ico" />
+  <link rel="icon" href="./CiberSecurity/img/icone-logo.ico" />
   <link rel="preconnect" href="https://fonts.gstatic.com" />
 </head>
 
 <body onload="listar()">
-  <!--header inicio-->
-  <div class="header">
-    <div class="container">
-      <h1 class="titulo">AquaTech</h1>
-      <ul class="navbar">
-        <li>
-          <a href="index.html">Inicial</a>
-        </li>
-        <li>
-          <a href="simulador.html">Simulador</a>
-        </li>
-        <li>|</li>
-        <li>
-          <a href="login.html">Login</a>
-        </li>
-        <li class="agora">
-          <a href="#">Cadastro</a>
-        </li>
+  <div class="video-background">
+    <video autoplay muted loop>
+      <source src="./CiberSecurity/img/matrix-background.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="header" id="head">
+    <div class="navbar">
+      <div class="logo">
+        <img class="img" src="./CiberSecurity/img/logo.png" alt="Logo">
+      </div>
+      <ul class="menu">
+        <li><a href="./CiberSecurity/index.html">Home</a></li>
+        <li><a href="./CiberSecurity/seguranca.html">Como se Proteger?</a></li>
+        <li><a href="./CiberSecurity/hacking.html">Hacking</a></li>
+        <li><a href="#">Quiz segurança</a></li>
+        <li><a href="./login.html">Login</a></li>
+        <li class="agora"><a href="./cadastro.html">Cadastro</a></li>
+
       </ul>
     </div>
   </div>
-  <!--header fim-->
+
 
   <div class="login">
     <div class="alerta_erro">
@@ -49,18 +50,18 @@
       <div class="card card-cadastro">
         <h2>Bem-vindo!</h2>
         <div class="formulario">
-       <div class="campo">
-           <span>Qual seu perfil na area segurança?</span>
+          <div class="campo">
+            <span>Qual seu perfil na area segurança?</span>
             <select id="perfil_input" name="cidade">
-            <option value="1">Estudante</option>
-            <option value="2">Especialista em segurança</option>
-            <option value="3">Hacker Ativo</option>
-            <option value="4">Profissional Em Formação</option>
+              <option value="1">Estudante</option>
+              <option value="2">Especialista em segurança</option>
+              <option value="3">Hacker Ativo</option>
+              <option value="4">Profissional Em Formação</option>
             </select>
-         </div>
+          </div>
 
           <div class="campo">
-            
+
             <span>Nome:</span>
             <input id="nome_input" type="text" placeholder="Seu nome" />
           </div>
@@ -76,8 +77,10 @@
             <span>Confirmação da Senha:</span>
             <input id="confirmacao_senha_input" type="password" placeholder="******" />
           </div>
-          <button class="botao" onclick="cadastrar()">Cadastrar</button>
-            <a  style="text-align: center; text-decoration: none;" class="botao" href="login.html">Login</a>
+          <div><button class="botao" onclick="cadastrar()">Cadastrar</button>
+          <button class="botao" onclick="window.location.href='login.html'">Login</button>
+
+        </div>
         </div>
         <div id="div_aguardar" class="loading-div">
           <img src="./assets/circle-loading.gif" id="loading-gif" />
@@ -86,15 +89,21 @@
         <div id="div_erros_login"></div>
       </div>
     </div>
- 
-   </div>
-  <!--footer inicio-->
-  <div class="footer">
-    <div class="container">
-      <h4>Feito com amor por aluno &hearts; SPTech &copy; 2023</h4>
-      <span class="version">v1.0.0</span>
-    </div>
+
   </div>
+  <!--footer inicio-->
+  <footer class="footer">
+    <div class="footer-container">
+      <img src="./CiberSecurity/img/logo.png" alt="Logo Matrix Code" class="footer-logo" />
+      <p>© 2025 Matrix Code. Todos os direitos reservados.</p>
+      <ul class="footer-links">
+        <li><a href="#">Política de Privacidade</a></li>
+        <li><a href="#">Termos de Uso</a></li>
+        <li><a href="#">Agradecimento</a></li>
+        <li><a href="#">Contato</a></li>
+      </ul>
+    </div>
+  </footer>
   <!--footer fim-->
 </body>
 
@@ -126,7 +135,7 @@
     ) {
       cardErro.style.display = "block";
       mensagem_erro.innerHTML =
-        "(Mensagem de erro para todos os campos em branco)";
+        "Erro todos os campos estão em branco";
 
       finalizarAguardar();
       return false;
@@ -146,7 +155,7 @@
         console.log('cheguei aqui')
         cardErro.style.display = "block";
         mensagem_erro.innerHTML = "Email informado já está cadastrado altere ou faça o login";
-         setInterval(sumirMensagem, 5000);
+        setInterval(sumirMensagem, 5000);
         return false;
         break;
       }
@@ -199,27 +208,27 @@
 
   // Listando usuarios cadastrados
   function listar() {
-  fetch("/usuarios/listar", {
-    method: "GET",
-  })
-    .then(function (resposta) {
-      resposta.json().then((usuarios) => {
-        usuarios.forEach((usuario) => {
-          listaUsuariosCadastrados.push(usuario);
-
-          console.log("listaUsuariosCadastrados");
-          console.log(listaUsuariosCadastrados[0].email);
-        });
-      });
+    fetch("/usuarios/listar", {
+      method: "GET",
     })
-    .catch(function (resposta) {
-      console.log(`#ERRO: ${resposta}`);
-    });
-}
+      .then(function (resposta) {
+        resposta.json().then((usuarios) => {
+          usuarios.forEach((usuario) => {
+            listaUsuariosCadastrados.push(usuario);
 
-function sumirMensagem() {
-  cardErro.style.display = "none";
-}
+            console.log("listaUsuariosCadastrados");
+            console.log(listaUsuariosCadastrados[0].email);
+          });
+        });
+      })
+      .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+      });
+  }
+
+  function sumirMensagem() {
+    cardErro.style.display = "none";
+  }
 
 
 </script>

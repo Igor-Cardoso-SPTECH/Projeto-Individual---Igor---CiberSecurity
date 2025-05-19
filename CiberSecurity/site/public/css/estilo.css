@@ -123,15 +123,6 @@ body {
     color: white;
 }
 
-
-
-
-/* BANNER */
-
-
-
-/* MISSÃO VISÃO VALORES */
-
 .social {
   background-color: #e5e5e5;
   display: flex;
@@ -205,6 +196,9 @@ body {
    filter: drop-shadow(0 0 10px #00FF09);
 }
 
+.card spa{
+  font-size: 50px;
+}
 .card h2 {
   margin: 0;
   font-size: 30px;
@@ -219,7 +213,7 @@ body {
 }
 
 .formulario span {
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 800;
 }
 
@@ -233,7 +227,7 @@ body {
 .formulario select {
   border: 2px solid #32b9cd;
   background-color: white;
-  color: gray;
+  color: rgb(0, 0, 0);
   height: 36px;
   text-align: center;
   border-radius: 10px;
@@ -245,6 +239,9 @@ body {
   flex-direction: column;
   justify-content: start;
   padding: 5px 0;
+}
+.textcontainer{
+  font-size: 0px;
 }
 
 .botao {

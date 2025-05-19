@@ -143,8 +143,9 @@ body {
 
 .texthaxs{
     padding-top: 70px;
-    margin-left: 500px;
+    margin-left: 600px;
     max-width: 800px;
+    font-size: 20px;
     text-align: justify;
 }
 

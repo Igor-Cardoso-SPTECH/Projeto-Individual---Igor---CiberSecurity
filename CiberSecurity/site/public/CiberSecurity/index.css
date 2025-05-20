@@ -136,6 +136,11 @@ body {
     border-radius: 25px;
     transition: background-color 0.3s ease;
     margin-bottom: 60px;
+    
+}
+
+.proteger a{
+    text-decoration: none;
 }
 
 .proteger:hover {
@@ -269,6 +274,7 @@ body {
 
 .footer-logo {
     height: 80px;
+     cursor: pointer;
 }
 
 .footer p {
@@ -292,6 +298,4 @@ body {
     transition: color 0.3s;
 }
 
-.footer-links li a:hover {
-    color: white;
-}
+

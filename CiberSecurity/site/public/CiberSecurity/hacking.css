@@ -310,6 +310,7 @@ background-color: #262626;
 
 .footer-logo {
     height: 80px;
+     cursor: pointer;
 }
 
 .footer p {
@@ -333,9 +334,6 @@ background-color: #262626;
     transition: color 0.3s;
 }
 
-.footer-links li a:hover {
-    color: white;
-}
 .hardware-section {
     display: flex;
     flex-direction: column;

@@ -265,6 +265,7 @@ body {
 
 .footer-logo {
     height: 80px;
+    cursor: pointer;
 }
 
 .footer p {
@@ -288,9 +289,7 @@ body {
     transition: color 0.3s;
 }
 
-.footer-links li a:hover {
-    color: white;
-}
+
 .cuidados-container {
     background-color: #111;
     padding: 50px 30px;
@@ -334,7 +333,7 @@ body {
     justify-content: space-between;
     margin-bottom: 40px;
     gap: 40px;
-    background-color: #1a1a1a;
+    background-color: #434343;
     border: 1px solid #00FF09;
     border-radius: 10px;
     padding: 20px;
@@ -363,4 +362,9 @@ body {
 
 .coluna-prevencao li::marker {
     color: #00FF09;
+}
+
+.cuidados-linha img{
+    display: table-column;
+    height: 180px;
 }

@@ -437,6 +437,7 @@ input {
 
 .footer-logo {
     height: 80px;
+     cursor: pointer;
 }
 
 .footer p {
@@ -460,6 +461,4 @@ input {
     transition: color 0.3s;
 }
 
-.footer-links li a:hover {
-    color: white;
-}
+

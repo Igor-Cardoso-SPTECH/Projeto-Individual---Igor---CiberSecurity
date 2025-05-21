@@ -16,5 +16,11 @@ router.get("/listar", function (req, res) {
     usuarioController.listar(req, res);
 });
 
+router.get("/pontuacaoQuizz", function (req, res) {
+    usuarioController.pontuacaoQuizz(req, res);
+});
+router.get("/Registrados", function (req, res) {
+    usuarioController.perfisRegistrados(req, res);
+});
 
 module.exports = router;

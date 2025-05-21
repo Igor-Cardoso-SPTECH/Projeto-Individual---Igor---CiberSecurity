@@ -100,8 +100,40 @@ function listar(req, res) {
             res.status(500).json(erro.sqlMessage);
         });
 }
+function pontuacaoQuizz(req, res){
+    usuarioModel.pontuacaoQuizz()
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum usuário encontrado!");
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage);
+        });
+}
+
+function perfisRegistrados(req,res){
+
+     usuarioModel.perfisRegistrados()
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum usuário encontrado!");
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage);
+        });
+}
+
+
 module.exports = {
     autenticar,
     cadastrar,
-    listar
+    listar,
+    pontuacaoQuizz,
+    perfisRegistrados
 }

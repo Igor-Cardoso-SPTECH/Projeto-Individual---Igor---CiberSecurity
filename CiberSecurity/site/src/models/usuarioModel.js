@@ -26,10 +26,8 @@ function listar() {
     return database.executar(instrucaoSql);
 }
 
-function pontuacaoQuizz() {
-    var instrucaoSql = `select q.id,pontuacao,data from quizz q
-inner join  usuario u 
-on u.id = q.id order by q.id desc limit 5;`;
+function pontuacaoQuizz(email) {
+    var instrucaoSql = `select pontuacao, data from vw_quizz where email = '${email}' order by idQuizz;`;
 
     return database.executar(instrucaoSql);
 }

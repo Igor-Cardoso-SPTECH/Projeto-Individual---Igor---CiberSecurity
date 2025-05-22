@@ -87,6 +87,7 @@ function cadastrar(req, res) {
             );
     }
 }
+
 function listar(req, res) {
     usuarioModel.listar()
         .then(function (resultado) {
@@ -100,19 +101,16 @@ function listar(req, res) {
             res.status(500).json(erro.sqlMessage);
         });
 }
-function pontuacaoQuizz(req, res){
-    usuarioModel.pontuacaoQuizz()
-        .then(function (resultado) {
-            if (resultado.length > 0) {
-                res.status(200).json(resultado);
-            } else {
-                res.status(204).send("Nenhum usuário encontrado!");
-            }
-        }).catch(function (erro) {
-            console.log(erro);
-            res.status(500).json(erro.sqlMessage);
+function pontuacaoQuizz(req, res) {
+    const email = req.body.email;
+    usuarioModel.pontuacaoQuizz(email)
+        .then(resultado => res.json(resultado))
+        .catch(erro => {
+            console.error("Erro ao buscar pontuação:", erro);
+            res.status(500).json(erro);
         });
 }
+
 
 function perfisRegistrados(req,res){
 

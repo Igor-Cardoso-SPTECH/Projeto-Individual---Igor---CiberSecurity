@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 <head>
-    <link rel="shortcut icon" href="../assets/icon/favicon2.ico" type="image/x-icon">
+    <link rel="icon" href="./CiberSecurity/img/icone-logo.ico" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +22,7 @@
     <script src="https://kit.fontawesome.com/9f7414eb10.js" crossorigin="anonymous"></script>
 </head>
 
-<body onload="obterDados(); validarSessao()">
+<body onload="obterDados();">
     <div class="janela">
         <div class="header-left">
             <h1>Cybersecurity</h1>
@@ -55,14 +55,14 @@
             <div id="alerta"></div>
             <div class="graficos-container" id="btnAquario">
                 <div class="grafico">
-                <center><span class="textGreen">Suas Pontuações Quizz</span></center>
-                <br><br>
+                    <center><span class="textGreen">Suas Pontuações Quizz</span></center>
+                    <br><br>
                     <canvas id="linha"></canvas>
                 </div>
                 <div class="grafico">
                     <div class="grafico2">
-                    <center><span class="textGreen">Perfis Registrados no Site</span></center><br><br>
-                    <canvas class="opa" id="barra"></canvas>
+                        <center><span class="textGreen">Perfis Registrados no Site</span></center><br><br>
+                        <canvas class="opa" id="barra"></canvas>
                     </div>
                 </div>
             </div>
@@ -80,10 +80,21 @@
     let myChartPizza;
 
     function obterDados() {
-        fetch('/usuarios/pontuacaoQuizz')
+        var email = sessionStorage.EMAIL_USUARIO;
+
+        // Enviando o e-mail no corpo da requisição
+        fetch('/usuarios/pontuacaoQuizz', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email })
+        })
             .then(res => res.json())
             .then(data => plotarGraficoLinha(data))
             .catch(err => console.log(err));
+
+        console.log(email)
 
         fetch('/usuarios/Registrados')
             .then(res => res.json())
@@ -92,8 +103,8 @@
     }
 
     function plotarGraficoLinha(dados) {
-        let pontuacao = [];
-        let datas = [];
+        let pontuacao = [0];
+        let datas = [0];
 
         for (let i = 0; i < dados.length; i++) {
             let dataTratada = dados[i].data.split('T')[0];
@@ -130,13 +141,13 @@
 
         const ctx = document.getElementById('barra').getContext('2d');
         const cores = [
-  '#bffe1b', // Verde Neon
-  '#3aaa34', // Ciano Neon
-  '#02321a', // Magenta Neon
-  '#67bb87', // Vermelho vibrante
-  '#5f800d', // Amarelo Ouro
-  '#89cc86', // Azul Neon
-];
+            '#bffe1b', // Verde Neon
+            '#3aaa34', // Ciano Neon
+            '#02321a', // Magenta Neon
+            '#67bb87', // Vermelho vibrante
+            '#5f800d', // Amarelo Ouro
+            '#89cc86', // Azul Neon
+        ];
 
         myChartPizza = new Chart(ctx, {
             type: 'pie',
@@ -155,7 +166,16 @@
     }
 
     function atualizarGraficoLinha() {
-    fetch('/usuarios/pontuacaoQuizz', { cache: 'no-store' })
+    const email = sessionStorage.EMAIL_USUARIO;
+
+    fetch('/usuarios/pontuacaoQuizz', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email }),
+        cache: 'no-store'
+    })
         .then(res => res.json())
         .then(dados => {
             if (!dados || dados.length === 0) return;
@@ -165,13 +185,10 @@
             const ultimaData = myChartLinha.data.labels[myChartLinha.data.labels.length - 1];
 
             if (novaData === ultimaData) {
-                // Atualiza o último valor de pontuação, se a data for igual
                 myChartLinha.data.datasets[0].data[myChartLinha.data.datasets[0].data.length - 1] = novaPontuacao;
             } else {
-                // Remove o mais antigo e adiciona o novo
                 myChartLinha.data.labels.shift();
                 myChartLinha.data.labels.push(novaData);
-
                 myChartLinha.data.datasets[0].data.shift();
                 myChartLinha.data.datasets[0].data.push(novaPontuacao);
             }
@@ -205,5 +222,5 @@
             .catch(err => console.error("Erro ao atualizar gráfico de pizza:", err));
     }
 
- 
+
 </script>

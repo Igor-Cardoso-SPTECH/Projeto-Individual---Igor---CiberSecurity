@@ -58,20 +58,33 @@ body {
 }
 
 .btn-nav-white {
-    background-color: white;
     color: #00FF09;
-    border: 2px solid #00FF09;
+    border: 2px solid #1B8800;
 }
 
 .btn-nav-white a {
     text-decoration: none;
-    color: #00FF09;
+    color: #ffffff;
 }
 
 .btn-logout {
-    background-color: #00FF09;
+    background-color: #1B8800;
+     border: 2px solid #1B8800;
     color: black;
 }
+
+
+
+.btn-logout:hover{
+      background-color: #00ff0800;
+    border: 2px solid #1B8800;
+      color: white;
+}
+
+.btn-nav-white:hover{
+      background-color: #1B8800;
+}
+
 
 /* Área da dashboard */
 .dash {

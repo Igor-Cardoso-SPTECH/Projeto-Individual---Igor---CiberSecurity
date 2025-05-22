@@ -16,7 +16,7 @@ router.get("/listar", function (req, res) {
     usuarioController.listar(req, res);
 });
 
-router.get("/pontuacaoQuizz", function (req, res) {
+router.post("/pontuacaoQuizz", function (req, res) {
     usuarioController.pontuacaoQuizz(req, res);
 });
 router.get("/Registrados", function (req, res) {

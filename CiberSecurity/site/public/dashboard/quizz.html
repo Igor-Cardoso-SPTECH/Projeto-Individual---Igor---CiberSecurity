@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cybersecurity | Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="./img/icone-logo.ico" />
+</head>
+
+<body onload="onloadEsconder()">
+    <div class="header" id="head">
+        <div class="navbar">
+            <div class="logo">
+                <img class="img" src="./img/logo.png" alt="Logo">
+            </div>
+            <ul class="menu">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./seguranca.html">Como se Proteger?</a></li>
+                <li><a href="./hacking.html">Hacking</a></li>
+                <li><a href="../dashboard/dashboard.html">Dashboard</a></li>
+                <li><a href="../login.html">Login</a></li>
+                <li><a href="../cadastro.html">Cadastro</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mensagem">
+        <h1 class="slogan">
+            <span>Teste seus conhecimentos</span> em <span>Segurança Digital</span>
+        </h1>
+    </div>
+
+
+    <div class="alerta_erro">
+        <div class="card_erro" id="cardErro">
+            <span id="mensagem_erro"></span>
+        </div>
+    </div>
+
+    <div class="back" id="pontuacaoEJogo">
+        <h1 style="color: #00FF09;">Informe Qual questionario Deseja Responder</h1>
+        <button onclick="quizzBasic()" id="btnSeg" class="botton">Segurança Basica</button>
+        <button onclick="quizzDificil()" id="btnSegDificil" class="botton">Segurança Avançada</button>
+        <button onclick="quizzHacking()" id="btnSegHacking" class="botton">Hacking</button>
+        <div class="mensagem">
+            <button id="btnIniciarQuiz" class="proteger text-btn" onclick="iniciarQuiz()">INICIAR QUIZ</button>
+        </div>
+
+        <div id="pontuacao" class="explicacao">
+            <div id="pontuacaoDuranteJogo">
+
+                <div class="contador">
+                    <li>Quantidade de acertos: <span id="spanCertas"></span></li>
+                    <li> Quantidade de erros: <span id="spanErradas"></span></li>
+                </div>
+            </div>
+        </div>
+        <div id="pontuacao1" class="explicacao">
+            <p id="pontuacaoFinal">Pontuação Final: <span id="spanPontuacaoFinal">***</span></p>
+            <p id="msgFinal">***</p>
+        </div>
+
+        <div id="jogo" class="explicacao">
+            <p>Questão atual: <span id="spanNumeroDaQuestaoAtual"></span> de <span id="qtdQuestoes"></span> questões.
+            </p>
+
+        </div>
+        <div id="questoes">
+            <p id="spanQuestaoExibida" class="subtitle"></p>
+            <p><em>Escolha uma opção dentre as abaixo:</em></p>
+            <div id="opcoes">
+                <p><input type="radio" id="primeiraOpcao" name="option" value="alternativaA" />
+                    <label for="primeiraOpcao" id="labelOpcaoUm"></label>
+                </p>
+
+                <p><input type="radio" id="segundaOpcao" name="option" value="alternativaB" />
+                    <label for="segundaOpcao" id="labelOpcaoDois"></label>
+                </p>
+
+                <p><input type="radio" id="terceiraOpcao" name="option" value="alternativaC" />
+                    <label for="terceiraOpcao" id="labelOpcaoTres"></label>
+                </p>
+
+                <p><input type="radio" id="quartaOpcao" name="option" value="alternativaD" />
+                    <label for="quartaOpcao" id="labelOpcaoQuatro"></label>
+                </p>
+
+            </div>
+            <div id="botoes">
+                <button onclick="submeter()" id="btnSubmeter" class="proteger text-btn">Submeter resposta</button>
+                <button onclick="avancar()" id="btnProx" class="proteger text-btn">Próxima questão</button>
+                <button onclick="tentarNovamente()" id="btnTentarNovamente" class="proteger text-btn">Tentar
+                    novamente</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="./js/quiz.js"></script>
+</body>
+
+</html>
+
+<script>
+    const listaDeQuestoes = [];
+
+
+    document.getElementById('btnTentarNovamente').style.display = 'none'
+
+    // variáveis globais    
+    let numeroDaQuestaoAtual = 0
+    var pontuacaoFinal = 0
+    let tentativaIncorreta = 0
+    let certas = 0
+    let erradas = 0
+    var quantidadeDeQuestoes = listaDeQuestoes.length
+
+    let pressionado1 = false
+    let pressionado2 = false
+    let pressionado3 = false
+
+    function preencherHTMLcomQuestaoAtual(index) {
+        habilitarAlternativas(true)
+        const questaoAtual = listaDeQuestoes[index]
+        numeroDaQuestaoAtual = index
+        console.log("questaoAtual")
+        console.log(questaoAtual)
+        document.getElementById("spanNumeroDaQuestaoAtual").innerHTML = Number(index) + 1 // ajustando porque o index começa em 0
+        document.getElementById("spanQuestaoExibida").innerHTML = questaoAtual.pergunta;
+        document.getElementById("labelOpcaoUm").innerHTML = questaoAtual.alternativaA;
+        document.getElementById("labelOpcaoDois").innerHTML = questaoAtual.alternativaB;
+        document.getElementById("labelOpcaoTres").innerHTML = questaoAtual.alternativaC;
+        document.getElementById("labelOpcaoQuatro").innerHTML = questaoAtual.alternativaD;
+    }
+
+    function submeter() {
+        const options = document.getElementsByName("option"); // recupera alternativas no html
+
+        let hasChecked = false
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].checked) {
+                hasChecked = true
+                break
+            }
+        }
+
+        if (!hasChecked) {
+            mensagem_erro.innerHTML = "Não há alternativas escolhidas. Escolha uma opção."
+            classComCoresParaMensagemFinal = "text-danger-with-bg"
+            document.getElementById('cardErro').style.display = 'block'
+            setInterval(sumirMensagem, 3000)
+        } else {
+            btnSubmeter.disabled = true
+            btnProx.disabled = false
+
+            habilitarAlternativas(false)
+
+            checarResposta()
+        }
+    }
+
+    function habilitarAlternativas(trueOrFalse) {
+        let opcaoEscolhida = trueOrFalse ? false : true
+
+        primeiraOpcao.disabled = opcaoEscolhida
+        segundaOpcao.disabled = opcaoEscolhida
+        terceiraOpcao.disabled = opcaoEscolhida
+        quartaOpcao.disabled = opcaoEscolhida
+
+    }
+
+    function avancar() {
+        btnProx.disabled = true
+        btnSubmeter.disabled = false
+
+        desmarcarRadioButtons()
+
+        if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
+        } else if (numeroDaQuestaoAtual == quantidadeDeQuestoes - 1) {
+            alert("Atenção... a próxima é a ultima questão!")
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
+        } else {
+            finalizarJogo()
+        }
+        limparCoresBackgroundOpcoes()
+    }
+
+    function tentarNovamente() {
+        // atualiza a página
+        window.location.reload()
+        sumirMensagem()
+    }
+
+    function checarResposta() {
+        const questaoAtual = listaDeQuestoes[numeroDaQuestaoAtual] // questão atual 
+        const respostaQuestaoAtual = questaoAtual.alternativaCorreta // qual é a resposta correta da questão atual
+        document.getElementById('btnProx').style.display = ''
+
+        const options = document.getElementsByName("option"); // recupera alternativas no html
+
+        let alternativaCorreta = null // variável para armazenar a alternativa correta
+
+        options.forEach((option) => {
+            if (option.value === respostaQuestaoAtual) {
+                console.log("alternativaCorreta está no componente: " + alternativaCorreta)
+                alternativaCorreta = option.labels[0].id
+            }
+        })
+
+        // verifica se resposta assinalada é correta
+        options.forEach((option) => {
+            if (option.checked === true && option.value === respostaQuestaoAtual) {
+                document.getElementById(alternativaCorreta).classList.add("text-success-with-bg")
+                pontuacaoFinal++
+                certas++
+                document.getElementById("spanCertas").innerHTML = certas
+                numeroDaQuestaoAtual++
+            } else if (option.checked && option.value !== respostaQuestaoAtual) {
+                const wrongLabelId = option.labels[0].id
+
+                document.getElementById(wrongLabelId).classList.add("text-danger-with-bg")
+                document.getElementById(alternativaCorreta).classList.add("text-success-with-bg")
+                tentativaIncorreta++
+                erradas++
+                document.getElementById("spanErradas").innerHTML = erradas
+                numeroDaQuestaoAtual++
+            }
+        })
+    }
+
+    function limparCoresBackgroundOpcoes() {
+        const options = document.getElementsByName("option");
+        options.forEach((option) => {
+            document.getElementById(option.labels[0].id).classList.remove("text-danger-with-bg")
+            document.getElementById(option.labels[0].id).classList.remove("text-success-with-bg")
+        })
+    }
+
+    function desmarcarRadioButtons() {
+        const options = document.getElementsByName("option");
+        for (let i = 0; i < options.length; i++) {
+            options[i].checked = false;
+        }
+        document.getElementById('btnProx').style.display = 'none'
+    }
+
+    function finalizarJogo() {
+        let textoParaMensagemFinal = ''
+        let classComCoresParaMensagemFinal = null
+        const porcentagemFinalDeAcertos = pontuacaoFinal / quantidadeDeQuestoes
+
+
+        textoParaMensagemFinal += "<br> Você acertou " + Math.round((porcentagemFinalDeAcertos) * 100) + "% das questões."
+
+
+        document.getElementById('msgFinal').innerHTML = textoParaMensagemFinal
+        document.getElementById('msgFinal').classList.add(classComCoresParaMensagemFinal)
+        document.getElementById('spanPontuacaoFinal').innerHTML = pontuacaoFinal
+
+        document.getElementById('jogo').classList.add("text-new-gray")
+
+        btnProx.disabled = true
+        btnSubmeter.disabled = true
+        // btnConcluir.disabled = true
+
+        document.getElementById('btnTentarNovamente').style.display = 'block'
+
+
+        document.getElementById('btnTentarNovamente').style.display = ''
+        if (porcentagemFinalDeAcertos <= 0.3) {
+            mensagem_erro.innerHTML = "Parece que você não estudou..."
+            classComCoresParaMensagemFinal = "text-danger-with-bg"
+            document.getElementById('cardErro').style.display = 'block'
+            return false;
+        }
+        else if (porcentagemFinalDeAcertos > 0.3 && porcentagemFinalDeAcertos < 0.9) {
+            mensagem_erro.innerHTML = "Pode melhorar na próxima, hein!"
+            classComCoresParaMensagemFinal = "text-warning-with-bg"
+            document.getElementById('cardErro').style.display = 'block'
+            return false;
+        }
+        else if (porcentagemFinalDeAcertos >= 0.9) {
+            mensagem_erro.innerHTML = "Uau, parabéns!"
+            document.getElementById('cardErro').style.display = 'block'
+            classComCoresParaMensagemFinal = "text-success-with-bg"
+            return false;
+        }
+
+
+
+    }
+
+    function quizzBasic() {
+
+        var questoesBasicas = [
+            {
+                pergunta: "No contexto de segurança da informação, qual é a principal característica da engenharia social?",
+                alternativaA: "Manipulação psicológica para explorar vulnerabilidades humanas.",
+                alternativaB: "Uso de criptografia para proteger dados.",
+                alternativaC: "Desenvolvimento de firewalls corporativos.",
+                alternativaD: "Ataques automatizados via malware.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Qual das funções abaixo melhor descreve o papel de um firewall corporativo?",
+                alternativaA: "Controla o fluxo de tráfego baseado em regras de segurança.",
+                alternativaB: "Realiza backups automáticos do sistema.",
+                alternativaC: "Detecta vulnerabilidades em aplicativos web.",
+                alternativaD: "Garante integridade dos dados em servidores.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "O termo 'Zero Day' refere-se a:",
+                alternativaA: "Uma vulnerabilidade recém-descoberta, ainda sem correção disponível.",
+                alternativaB: "Atualizações regulares de segurança.",
+                alternativaC: "Um método de autenticação multifator.",
+                alternativaD: "Um tipo de ataque de negação de serviço.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Qual a abordagem recomendada para armazenamento seguro de senhas em sistemas modernos?",
+                alternativaA: "Uso de hashes criptográficos com salt para dificultar ataques.",
+                alternativaB: "Armazenar senhas em texto simples com backups frequentes.",
+                alternativaC: "Enviar senhas criptografadas por e-mail.",
+                alternativaD: "Guardar senhas em arquivos criptografados simetricamente.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Autenticação multifator (MFA) combina elementos para aumentar a segurança. Qual das opções NÃO é um fator típico utilizado?",
+                alternativaA: "Algo que você deseja (preferência pessoal).",
+                alternativaB: "Algo que você sabe (senha).",
+                alternativaC: "Algo que você tem (token).",
+                alternativaD: "Algo que você é (biometria).",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Qual é o principal mecanismo de ataque utilizado em phishing?",
+                alternativaA: "Engenharia social para capturar dados em sites falsos.",
+                alternativaB: "Exploração de protocolos de rede para captura de pacotes.",
+                alternativaC: "Ataques de força bruta em sistemas de autenticação.",
+                alternativaD: "Instalação automática de malwares via exploits.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Qual das alternativas representa uma consequência direta de um ataque de phishing bem-sucedido?",
+                alternativaA: "Comprometimento de credenciais e possível instalação de malware.",
+                alternativaB: "Diminuição do desempenho da rede.",
+                alternativaC: "Exposição de logs para auditoria.",
+                alternativaD: "Aumento da largura de banda.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Qual das medidas a seguir é mais eficaz para mitigar ataques de phishing?",
+                alternativaA: "Implementar autenticação multifator e treinamentos de conscientização.",
+                alternativaB: "Ignorar atualizações do sistema.",
+                alternativaC: "Desabilitar filtros de e-mail.",
+                alternativaD: "Usar redes públicas para acesso remoto.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Ransomware é um tipo de malware que:",
+                alternativaA: "Criptografa arquivos e exige pagamento para liberação.",
+                alternativaB: "Monitoriza atividades de rede.",
+                alternativaC: "Atualiza sistemas automaticamente.",
+                alternativaD: "Desativa firewalls.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Qual a estratégia mais recomendada para prevenção contra ransomware?",
+                alternativaA: "Manter sistemas atualizados e realizar backups regulares.",
+                alternativaB: "Desligar o computador após uso.",
+                alternativaC: "Instalar vários antivírus simultaneamente.",
+                alternativaD: "Utilizar redes Wi-Fi públicas exclusivamente.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Anexos maliciosos em e-mails podem ser caracterizados como:",
+                alternativaA: "Arquivos que executam códigos maliciosos ao abrir.",
+                alternativaB: "Documentos legítimos de fontes confiáveis.",
+                alternativaC: "Fotos e vídeos pessoais compartilhados.",
+                alternativaD: "Atualizações oficiais enviadas por e-mail.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Qual a melhor prática para reduzir riscos de abrir anexos maliciosos?",
+                alternativaA: "Usar antivírus atualizado e confirmar origem do remetente.",
+                alternativaB: "Abrir anexos rapidamente para verificação.",
+                alternativaC: "Desativar firewalls para circulação livre de arquivos.",
+                alternativaD: "Salvar anexos sem escanear.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Por que o uso de redes Wi-Fi públicas pode representar risco à segurança?",
+                alternativaA: "Possibilidade de interceptação e captura de dados.",
+                alternativaB: "Reduz a velocidade da internet.",
+                alternativaC: "Não permite conexões HTTPS.",
+                alternativaD: "Exige autenticação multifator.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Qual medida aumenta a segurança ao usar redes Wi-Fi públicas?",
+                alternativaA: "Usar VPN para criptografar tráfego.",
+                alternativaB: "Desativar firewall local.",
+                alternativaC: "Compartilhar conexão com outros dispositivos.",
+                alternativaD: "Evitar autenticação multifator.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "O que caracteriza um ataque de roubo de identidade digital?",
+                alternativaA: "Uso não autorizado de dados pessoais para fraudes.",
+                alternativaB: "Instalação de software de segurança.",
+                alternativaC: "Envio de notificações legítimas.",
+                alternativaD: "Mudança periódica de senhas.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Qual ação ajuda a minimizar riscos de roubo de identidade?",
+                alternativaA: "Compartilhar dados apenas em plataformas seguras.",
+                alternativaB: "Usar mesma senha para várias contas.",
+                alternativaC: "Enviar dados pessoais por e-mail.",
+                alternativaD: "Atualizar dados pessoais em redes sociais.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Qual o principal benefício de senhas fortes?",
+                alternativaA: "Reduzir chances de ataques de força bruta.",
+                alternativaB: "Facilitar acesso legítimo.",
+                alternativaC: "Permitir compartilhamento seguro.",
+                alternativaD: "Aumentar tempo de resposta do sistema.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Ao criar senha robusta, deve-se priorizar:",
+                alternativaA: "Combinação de letras, números e símbolos aleatórios.",
+                alternativaB: "Sequências simples como '123456'.",
+                alternativaC: "Nomes ou datas pessoais fáceis.",
+                alternativaD: "Senhas curtas para rapidez.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Por que manter sistemas atualizados é fundamental?",
+                alternativaA: "Corrigir vulnerabilidades exploráveis.",
+                alternativaB: "Garantir recursos visuais novos.",
+                alternativaC: "Evitar notificações do sistema.",
+                alternativaD: "Acelerar inicialização.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "O que define backup em segurança da informação?",
+                alternativaA: "Cópia segura de dados para recuperação.",
+                alternativaB: "Exclusão periódica para liberar espaço.",
+                alternativaC: "Desinstalar softwares desnecessários.",
+                alternativaD: "Alterar senhas regularmente.",
+                alternativaCorreta: "alternativaA"
+            }
+        ]
+
+        for (var i = 0; i < questoesBasicas.length; i++) {
+            listaDeQuestoes.push(questoesBasicas[i])
+        }
+        quantidadeDeQuestoes = listaDeQuestoes.length
+        document.getElementById('btnSeg').style.backgroundColor = "#1eff00"
+        document.getElementById('btnSegDificil').style.backgroundColor = "#073B00"
+        document.getElementById('btnSegHacking').style.backgroundColor = "#073B00";
+        pressionado1 = true
+    }
+
+    function quizzDificil() {
+        document.getElementById('btnSeg').style.backgroundColor = "#073B00"
+        document.getElementById('btnSegDificil').style.backgroundColor = "#1eff00"
+        document.getElementById('btnSegHacking').style.backgroundColor = "#073B00";
+        pressionado2 = true
+        var questoesDificil = [
+            {
+                pergunta: "O que caracteriza um ataque de watering hole?",
+                alternativaA: "Instalação de malware via dispositivos USB infectados.",
+                alternativaB: "Comprometimento de sites frequentemente visitados por um grupo-alvo para infectá-los.",
+                alternativaC: "Ataque por força bruta em redes Wi-Fi vulneráveis.",
+                alternativaD: "Phishing realizado através de sites bancários falsificados.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual é o objetivo principal de um ataque Man-in-the-Middle (MitM)?",
+                alternativaA: "Destruir dados críticos do sistema-alvo.",
+                alternativaB: "Interceptar e possivelmente modificar a comunicação entre duas partes sem que elas percebam.",
+                alternativaC: "Redirecionar chamadas telefônicas para fraudes.",
+                alternativaD: "Invadir roteadores residenciais para controle remoto.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Em segurança digital, o que é um hash?",
+                alternativaA: "Um método de criptografia simétrica para proteger dados.",
+                alternativaB: "Uma sequência aleatória utilizada para autenticação multifator.",
+                alternativaC: "Uma função unidirecional que gera uma representação única e fixa de um dado de entrada.",
+                alternativaD: "Uma técnica de compactação de arquivos para reduzir tamanho.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Qual das opções descreve uma vulnerabilidade zero-day?",
+                alternativaA: "Uma falha já corrigida pelos desenvolvedores.",
+                alternativaB: "Uma vulnerabilidade recém-descoberta, ainda sem correção disponível.",
+                alternativaC: "Uma falha pública que não pode mais ser explorada.",
+                alternativaD: "Um recurso experimental para segurança avançada.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "O que é um token de hardware utilizado em autenticação multifator (MFA)?",
+                alternativaA: "Um antivírus portátil para dispositivos móveis.",
+                alternativaB: "Um dispositivo físico que gera códigos temporários para autenticação segura.",
+                alternativaC: "Um aplicativo que armazena senhas de forma criptografada.",
+                alternativaD: "Um servidor externo para backup de dados.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual vulnerabilidade é explorada no ataque conhecido como SQL Injection?",
+                alternativaA: "Estouro de buffer (buffer overflow).",
+                alternativaB: "Acesso físico não autorizado ao hardware.",
+                alternativaC: "Falta de sanitização adequada das entradas em consultas a bancos de dados.",
+                alternativaD: "Redirecionamento malicioso de tráfego de rede.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Qual a principal vantagem da criptografia assimétrica?",
+                alternativaA: "Permite que múltiplos usuários acessem simultaneamente o mesmo arquivo.",
+                alternativaB: "Utiliza a mesma chave para criptografar e descriptografar dados.",
+                alternativaC: "Utiliza chaves diferentes para criptografia e descriptografia, garantindo segurança em canais públicos.",
+                alternativaD: "Elimina a necessidade de autenticação do usuário final.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "O que significa o princípio do menor privilégio em segurança da informação?",
+                alternativaA: "Todo usuário deve ter acesso irrestrito a todas as funções do sistema.",
+                alternativaB: "Usuários administrativos devem controlar todas as atividades do sistema.",
+                alternativaC: "Usuários devem receber somente as permissões estritamente necessárias para suas tarefas.",
+                alternativaD: "Dispositivos móveis devem ser utilizados exclusivamente para fins pessoais.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Qual característica define um ataque DDoS (Distributed Denial of Service)?",
+                alternativaA: "Acesso remoto não autorizado ao servidor alvo.",
+                alternativaB: "Envio massivo de mensagens de spam através de servidores falsificados.",
+                alternativaC: "Sobrecarregamento de um serviço com múltiplas requisições simultâneas oriundas de diversos dispositivos.",
+                alternativaD: "Injeção de scripts maliciosos em navegadores para roubo de dados.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Qual a função de uma sandbox em segurança digital?",
+                alternativaA: "Isolar softwares suspeitos em ambiente controlado para análise sem riscos ao sistema principal.",
+                alternativaB: "Testar a velocidade e estabilidade da rede local.",
+                alternativaC: "Reparar arquivos corrompidos automaticamente após falhas.",
+                alternativaD: "Compactar arquivos de log para armazenamento eficiente.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "O que diferencia ransomware de scareware?",
+                alternativaA: "Ransomware criptografa dados e exige resgate; scareware apenas tenta assustar o usuário para induzir ações.",
+                alternativaB: "Scareware é mais perigoso que ransomware, pois destrói dados imediatamente.",
+                alternativaC: "Ransomware afeta exclusivamente dispositivos móveis.",
+                alternativaD: "Scareware criptografa arquivos antes de exibir alertas falsos.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Qual a função do protocolo TLS em conexões HTTPS?",
+                alternativaA: "Realizar backups automáticos de sites.",
+                alternativaB: "Bloquear janelas pop-up indesejadas.",
+                alternativaC: "Garantir a integridade e confidencialidade dos dados transmitidos entre cliente e servidor.",
+                alternativaD: "Gerar senhas temporárias para usuários durante a navegação.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Qual o principal risco do uso de dispositivos BYOD (Bring Your Own Device) em ambientes corporativos?",
+                alternativaA: "Baixo desempenho do hardware pessoal.",
+                alternativaB: "Maior consumo de energia elétrica na empresa.",
+                alternativaC: "Supervisão reduzida e aumento do risco de vazamento de dados sensíveis.",
+                alternativaD: "Produtividade excessiva e difícil controle do uso.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Qual prática é recomendada para proteger APIs públicas?",
+                alternativaA: "Compartilhar publicamente as chaves de acesso para facilitar integração.",
+                alternativaB: "Remover autenticação para permitir testes rápidos.",
+                alternativaC: "Implementar autenticação, controle de taxa e validação rigorosa das entradas.",
+                alternativaD: "Desabilitar logs de erro para não expor falhas.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "O que é um certificado digital SSL/TLS?",
+                alternativaA: "Uma extensão de navegador para bloqueio de anúncios.",
+                alternativaB: "Um arquivo que autentica a identidade de um site e permite conexões seguras via criptografia.",
+                alternativaC: "Um dispositivo de hardware para proteção de rede.",
+                alternativaD: "Uma lista de sites bloqueados por firewalls.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual técnica é usada para ocultar o tráfego de rede em ataques persistentes?",
+                alternativaA: "Pharming, redirecionando usuários para sites falsos.",
+                alternativaB: "Steganografia aplicada a pacotes de dados.",
+                alternativaC: "Spoofing de endereço IP para mascarar origem.",
+                alternativaD: "Tunneling, encapsulando tráfego dentro de protocolos legítimos.",
+                alternativaCorreta: "alternativaD"
+            },
+            {
+                pergunta: "Qual ferramenta é comum em análises forenses digitais?",
+                alternativaA: "Photoshop para edição de imagens forenses.",
+                alternativaB: "Autopsy para análise detalhada de sistemas comprometidos.",
+                alternativaC: "Steam para gerenciamento de software.",
+                alternativaD: "BitTorrent para compartilhamento de arquivos.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "O que caracteriza um ataque de credential stuffing?",
+                alternativaA: "Envio massivo de mensagens SMS fraudulentas.",
+                alternativaB: "Uso de credenciais vazadas para tentar acesso em múltiplos serviços automaticamente.",
+                alternativaC: "Sequestro de servidores DNS para redirecionamento malicioso.",
+                alternativaD: "Redirecionamento de usuários para sites de propaganda enganosa.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual a vantagem da segmentação de rede (network segmentation)?",
+                alternativaA: "Reduz o consumo total de banda de internet.",
+                alternativaB: "Permite conectar um maior número de dispositivos simultaneamente.",
+                alternativaC: "Limita o impacto de ataques e melhora o controle sobre o tráfego interno.",
+                alternativaD: "Desativa firewalls locais para maior velocidade.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "O que caracteriza um ataque de deserialização insegura em software?",
+                alternativaA: "Falhas na manipulação de dados gráficos que causam travamentos.",
+                alternativaB: "Transformação inadequada de dados em objetos, possibilitando execução remota de código malicioso.",
+                alternativaC: "Criação de arquivos temporários sem criptografia.",
+                alternativaD: "Compressão incorreta de dados sensíveis em formatos abertos.",
+                alternativaCorreta: "alternativaB"
+            }
+        ]
+        for (var i = 0; i < questoesDificil.length; i++) {
+            listaDeQuestoes.push(questoesDificil[i])
+        }
+        quantidadeDeQuestoes = listaDeQuestoes.length
+    }
+
+    function quizzHacking() {
+        document.getElementById('btnSeg').style.backgroundColor = "#073B00"
+        document.getElementById('btnSegDificil').style.backgroundColor = "#073B00"
+        document.getElementById('btnSegHacking').style.backgroundColor = "#1eff00";
+        pressionado3 = true
+        var questoesHacking = [
+            {
+                pergunta: "O que define um hacker do tipo White Hat?",
+                alternativaA: "Cria vírus para roubar dados.",
+                alternativaB: "Atua legalmente para fortalecer sistemas.",
+                alternativaC: "Invade sistemas por diversão.",
+                alternativaD: "Realiza espionagem governamental.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual o foco principal do hacking Black Hat?",
+                alternativaA: "Aprender para uso pessoal.",
+                alternativaB: "Corrigir vulnerabilidades.",
+                alternativaC: "Ganhar com invasões ilegais.",
+                alternativaD: "Desenvolver software seguro.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "O que caracteriza um Gray Hat?",
+                alternativaA: "Age sempre dentro da lei.",
+                alternativaB: "Atua com permissão e ética.",
+                alternativaC: "Explora falhas sem causar danos.",
+                alternativaD: "Só age por dinheiro.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Qual ferramenta simula teclado para executar comandos?",
+                alternativaA: "Wi-Fi Pineapple",
+                alternativaB: "USB Rubber Ducky",
+                alternativaC: "Proxmark3",
+                alternativaD: "HackRF One",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual dispositivo captura handshakes e cria redes falsas?",
+                alternativaA: "USBKill",
+                alternativaB: "Flipper Zero",
+                alternativaC: "Wi-Fi Pineapple",
+                alternativaD: "OMG Cable",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "O que é o Bash Bunny?",
+                alternativaA: "Antivírus para Linux.",
+                alternativaB: "Dispositivo USB para ataques automáticos.",
+                alternativaC: "Software de criptografia.",
+                alternativaD: "Script para ataques DDoS.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual hacker age por causas políticas ou sociais?",
+                alternativaA: "Script Kiddie",
+                alternativaB: "Hacktivista",
+                alternativaC: "Green Hat",
+                alternativaD: "Blue Hat",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Para que serve o dispositivo USBKill?",
+                alternativaA: "Capturar tráfego Wi-Fi.",
+                alternativaB: "Executar comandos remotos.",
+                alternativaC: "Danos físicos por sobrecarga elétrica.",
+                alternativaD: "Clonar cartões NFC.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Qual ferramenta clona cartões RFID/NFC?",
+                alternativaA: "Proxmark3 RDV4",
+                alternativaB: "LAN Turtle",
+                alternativaC: "Bash Bunny",
+                alternativaD: "OMG Cable",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Quem atua para governos com espionagem ou sabotagem?",
+                alternativaA: "White Hat",
+                alternativaB: "Hacktivista",
+                alternativaC: "Hacker patrocinado por Estado",
+                alternativaD: "Script Kiddie",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "O que é engenharia social no hacking?",
+                alternativaA: "Ataque por força bruta.",
+                alternativaB: "Explora vulnerabilidades físicas.",
+                alternativaC: "Manipular pessoas para obter dados.",
+                alternativaD: "Forçar acesso a redes sociais.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "O que caracteriza um ataque MITM?",
+                alternativaA: "Clonar site para roubo de dados.",
+                alternativaB: "Interceptar comunicação para espionagem.",
+                alternativaC: "Bloquear site por requisições excessivas.",
+                alternativaD: "Executar vírus via pendrive.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "O que é um Script Kiddie?",
+                alternativaA: "Especialista em engenharia reversa.",
+                alternativaB: "Profissional autorizado para testes.",
+                alternativaC: "Iniciante usando ferramentas prontas.",
+                alternativaD: "Especialista em protocolos de rede.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Para que serve o Flipper Zero?",
+                alternativaA: "Analisar código-fonte.",
+                alternativaB: "Atacar usando RFID e IR.",
+                alternativaC: "Compilar exploits Linux.",
+                alternativaD: "Detectar vírus Wi-Fi.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual SO é usado em testes de penetração?",
+                alternativaA: "Windows XP",
+                alternativaB: "Ubuntu Server",
+                alternativaC: "Kali Linux",
+                alternativaD: "Android",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "O que é payload em hacking?",
+                alternativaA: "Código malicioso pós-exploração.",
+                alternativaB: "Camada transporte em MITM.",
+                alternativaC: "Backup após ataque.",
+                alternativaD: "Antivírus contra malware.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Função principal do LAN Turtle?",
+                alternativaA: "Injetar cargas elétricas.",
+                alternativaB: "Capturar sinais GSM.",
+                alternativaC: "Backdoor física e remota.",
+                alternativaD: "Emitir sinais Wi-Fi falsos.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Quem são os Red Hats?",
+                alternativaA: "Combatem Black Hats.",
+                alternativaB: "Especialistas em redes sociais.",
+                alternativaC: "Iniciantes em força bruta.",
+                alternativaD: "Hackers corporativos.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Por que o Raspberry Pi 4 é útil no hacking?",
+                alternativaA: "Roteador doméstico comum.",
+                alternativaB: "Microcomputador para pentest portátil.",
+                alternativaC: "Executa antivírus automático.",
+                alternativaD: "Bloqueia conexões remotas.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual dispositivo emula cartões e faz fuzzing RFID?",
+                alternativaA: "Wi-Fi Pineapple",
+                alternativaB: "OMG Cable",
+                alternativaC: "Proxmark3 RDV4",
+                alternativaD: "USB Rubber Ducky",
+                alternativaCorreta: "alternativaC"
+            }
+        ]
+        for (var i = 0; i < questoesHacking.length; i++) {
+            listaDeQuestoes.push(questoesHacking[i])
+        }
+        quantidadeDeQuestoes = listaDeQuestoes.length
+    }
+
+    function sumirMensagem() {
+        cardErro.style.display = "none";
+    }
+
+    function iniciarQuiz() {
+        document.getElementById('pontuacao').style.display = "flex"
+        document.getElementById('jogo').style.display = "flex"
+        document.getElementById('btnIniciarQuiz').style.display = "none"
+        document.getElementById('questoes').style.display = "block"
+        document.getElementById('pontuacao1').style.display = "block"
+        document.getElementById('qtdQuestoes').innerHTML = quantidadeDeQuestoes
+
+        preencherHTMLcomQuestaoAtual(0)
+
+
+        if (pressionado1) {
+            document.getElementById('btnSegDificil').style.display = "none"
+            document.getElementById('btnSegHacking').style.display = "none"
+        } else if (pressionado2) {
+            document.getElementById('btnSeg').style.display = "none"
+            document.getElementById('btnSegHacking').style.display = "none"
+        } else if (pressionado3) {
+            document.getElementById('btnSeg').style.display = "none"
+            document.getElementById('btnSegDificil').style.display = "none"
+
+
+            btnSubmeter.disabled = false
+            btnProx.disabled = true
+            // btnConcluir.disabled = true
+
+
+        }
+    }
+
+    function onloadEsconder() {
+        document.getElementById('pontuacao').style.display = "none"
+        document.getElementById('jogo').style.display = "none"
+        document.getElementById('questoes').style.display = "none"
+        document.getElementById('pontuacao1').style.display = 'none'
+        document.getElementById('btnProx').style.display = 'none'
+    }
+
+
+</script>

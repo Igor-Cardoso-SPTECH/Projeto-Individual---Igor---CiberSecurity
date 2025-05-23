@@ -1,0 +1,92 @@
+
+create database cybersecurity;
+
+use cybersecurity;
+
+CREATE TABLE perfil (
+  id int NOT NULL AUTO_INCREMENT,
+  descricao varchar(45) not null,
+  idUsuario int,
+  PRIMARY KEY (id));
+  
+insert into perfil (descricao)values 
+('Entusiasta'),
+('Hacker Ativo'),
+('Estudante CiberSecurity'),
+('Profissional Em Formação'),
+('Especialista em segurança');
+
+
+CREATE TABLE usuario (
+  id int NOT NULL AUTO_INCREMENT,
+  nome varchar(45) not null,
+  email varchar(50) not null,
+  senha varchar(30)not null,
+  perfil int not null,
+  PRIMARY KEY (id),
+  KEY perfil (perfil),
+  CONSTRAINT usuariofk1 FOREIGN KEY (perfil) REFERENCES perfil (id)
+);
+
+create table quizz (
+id int primary key auto_increment,
+pontuacao int not null, 
+id_usuario int not null,
+data datetime default(current_time),
+foreign key(id_usuario) references usuario(id));
+
+
+create table senhas(
+id int primary key auto_increment,
+senha int, 
+usuario int,
+foreign key (usuario) references usuario(id));
+
+
+
+/*---------------------------------SENHAS DO USUARIO--------------------------------*/
+
+select u.nome "Nome usuario", s.senha "Senhas Criadas" from usuario u
+inner join senhas s
+on s.usuario = u.id
+where u.email = 'cardosoigor113@gmail.com';
+
+/*--------------------------------USUARIO E SENHA---------------------------------*/
+
+SELECT * FROM usuario WHERE email = 'cardosoigor113@gmail.com' AND senha = '123';
+
+
+/*-----------------------------usuarios cadastrados-----------------------------------*/
+create view vw_usuarios as
+select nome, descricao from usuario u
+inner join perfil p
+on p.id = u.perfil; 
+
+select * from vw_usuarios;
+
+/*-----------------------------------QUIZZ DO USUARIO------------------------------*/
+alter view vw_quizz as
+select q.id idQuizz, id_usuario, pontuacao, email, data from usuario u
+inner join  quizz q
+on u.id = id_usuario order by id_usuario;
+
+select pontuacao, data from vw_quizz where email = 'cardosoigor113@gmail.com' order by idQuizz;
+
+
+insert into quizz (pontuacao,id_usuario) values
+(13,1),
+(20,1),
+(31,2),
+(27,2),
+(13,3),
+(28,3),
+(26,4),
+(9,4),
+(8,5),
+(30,5);
+
+insert into quizz (pontuacao, id_usuario) values
+(19, (select id from usuario where email = 'cardosoigor113@gmail.com'));
+
+select * from quizz;
+truncate table quizz;

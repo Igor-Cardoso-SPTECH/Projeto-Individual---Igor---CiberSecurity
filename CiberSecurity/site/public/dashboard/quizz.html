@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Cybersecurity | Quiz</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="quizz.css">
     <link rel="icon" href="./img/icone-logo.ico" />
+    <script src="../js/sessao.js"></script>
+    <script src="./../js/alerta.js"></script>
 </head>
 
-<body onload="onloadEsconder()">
+<body onload="onloadEsconder(), validarSessao() ">
     <div class="header" id="head">
         <div class="navbar">
             <div class="logo">
@@ -137,15 +139,15 @@
     function submeter() {
         const options = document.getElementsByName("option"); // recupera alternativas no html
 
-        let hasChecked = false
+        let foiChecado = false
         for (let i = 0; i < options.length; i++) {
             if (options[i].checked) {
-                hasChecked = true
+                foiChecado = true
                 break
             }
         }
 
-        if (!hasChecked) {
+        if (!foiChecado) {
             mensagem_erro.innerHTML = "Não há alternativas escolhidas. Escolha uma opção."
             classComCoresParaMensagemFinal = "text-danger-with-bg"
             document.getElementById('cardErro').style.display = 'block'

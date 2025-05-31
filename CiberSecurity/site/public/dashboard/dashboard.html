@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AquaTech | Dashboards</title>
+    <title>Cybersecurity | Dashboards</title>
 
     <link rel="stylesheet" href="./../css/dashboards.css">
     <link rel="stylesheet" href="./../css/estilo.css" />
@@ -22,7 +22,7 @@
     <script src="https://kit.fontawesome.com/9f7414eb10.js" crossorigin="anonymous"></script>
 </head>
 
-<body onload="obterDados();">
+<body onload="obterDados(),validarSessao();">
     <div class="janela">
         <div class="header-left">
             <h1>Cybersecurity</h1>
@@ -36,15 +36,18 @@
                 </a>
             </div>
 
+            
             <div class="btn-nav">
                 <h3>Gráficos</h3>
             </div>
+
 
             <div class="btn-nav-white">
                 <a href="./mural.html">
                     <h3>Mural de Avisos</h3>
                 </a>
             </div>
+
 
             <div class="btn-logout" onclick="limparSessao()">
                 <h3>Sair</h3>
@@ -69,7 +72,6 @@
             <div id="graficos"></div>
         </div>
     </div>
-
 </body>
 
 </html>
@@ -79,56 +81,105 @@
     let myChartLinha;
     let myChartPizza;
 
-    function obterDados() {
-        var email = sessionStorage.EMAIL_USUARIO;
+    let dadosBasico = [];
+    let dadosAvancado = [];
+    let dadosHacking = [];
 
-        // Enviando o e-mail no corpo da requisição
+    function obterDados() {
+    var email = sessionStorage.EMAIL_USUARIO;
+
+    Promise.all([
         fetch('/usuarios/pontuacaoQuizz', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: email })
-        })
-            .then(res => res.json())
-            .then(data => plotarGraficoLinha(data))
-            .catch(err => console.log(err));
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        }).then(res => res.json()),
 
-        console.log(email)
+        fetch('/usuarios/pontuacaoQuizzAvanc', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        }).then(res => res.json()),
 
-        fetch('/usuarios/Registrados')
-            .then(res => res.json())
-            .then(data => plotarGraficoPizza(data))
-            .catch(err => console.log(err));
+        fetch('/usuarios/pontuacaoQuizzHacking', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        }).then(res => res.json())
+    ])
+    .then(([basico, avancado, hacking]) =>{
+        dadosBasico = basico;
+        dadosAvancado = avancado;
+        dadosHacking = hacking;
+        plotarGraficoLinha(basico, avancado, hacking);
+    })
+    .catch(err => console.error("Erro ao buscar dados dos quizzes:", err));
+
+    fetch('/usuarios/Registrados')
+        .then(res => res.json())
+        .then(data => plotarGraficoPizza(data))
+        .catch(err => console.log("Erro ao buscar dados de registrados:", err));
+}
+   
+    function plotarGraficoLinha(basico, avancado, hacking) {
+    let pontuacoesBasico = [];
+    let pontuacoesAvancado = [];
+    let pontuacoesHacking = [];
+
+    // Coletando pontuações
+    for (let i = 0; i < basico.length; i++) {
+        pontuacoesBasico.push(basico[i].pontuacao);
     }
 
-    function plotarGraficoLinha(dados) {
-        let pontuacao = [0];
-        let datas = [0];
+    for (let i = 0; i < avancado.length; i++) {
+        pontuacoesAvancado.push(avancado[i].pontuacao);
+    }
 
-        for (let i = 0; i < dados.length; i++) {
-            let dataTratada = dados[i].data.split('T')[0];
-            pontuacao.push(dados[i].pontuacao);
-            datas.push(dataTratada);
-        }
+    for (let i = 0; i < hacking.length; i++) {
+        pontuacoesHacking.push(hacking[i].pontuacao);
+    }
 
-        const ctx = document.getElementById('linha').getContext('2d');
-        myChartLinha = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: datas,
-                datasets: [{
-                    label: 'pontuacao',
-                    data: pontuacao,
+    // Criando rotulos (tentativas)
+    let maiorQtd = Math.max(pontuacoesBasico.length, pontuacoesAvancado.length, pontuacoesHacking.length);
+    let labels = [];
+    for (let i = 0; i < maiorQtd; i++) {
+        labels.push(`Tentativa ${i + 1}`);
+    }
+
+    const ctx = document.getElementById('linha').getContext('2d');
+    myChartLinha = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Acertos Seg. Basic.',
+                    data: pontuacoesBasico,
                     backgroundColor: ['#00FF09'],
                     borderColor: ['#00FF09'],
-                    borderWidth: 1
-                }]
-            }
-        });
-
-        atualizarGraficoLinha();
-    }
+                    borderWidth: 1,
+                    tension: 0.2
+                },
+                {
+                    label: 'Acertos Seg. Avanç.',
+                    data: pontuacoesAvancado,
+                    backgroundColor: ['#bffe1b'],
+                    borderColor: ['#bffe1b'],
+                    borderWidth: 1,
+                    tension: 0.2
+                },
+                {
+                    label: 'Acertos Hacking',
+                    data: pontuacoesHacking,
+                    backgroundColor: ['#67bb87'],
+                    borderColor: ['#67bb87'],
+                    borderWidth: 1,
+                    tension: 0.2
+                }
+            ]
+        }
+    });
+}
 
     function plotarGraficoPizza(dados) {
         let unidades = [];
@@ -141,12 +192,12 @@
 
         const ctx = document.getElementById('barra').getContext('2d');
         const cores = [
-            '#bffe1b', // Verde Neon
-            '#3aaa34', // Ciano Neon
-            '#02321a', // Magenta Neon
-            '#67bb87', // Vermelho vibrante
-            '#5f800d', // Amarelo Ouro
-            '#89cc86', // Azul Neon
+            '#bffe1b',
+            '#3aaa34',
+            '#02321a',
+            '#67bb87',
+            '#5f800d',
+            '#89cc86',
         ];
 
         myChartPizza = new Chart(ctx, {
@@ -166,38 +217,38 @@
     }
 
     function atualizarGraficoLinha() {
-    const email = sessionStorage.EMAIL_USUARIO;
+        const email = sessionStorage.EMAIL_USUARIO;
 
-    fetch('/usuarios/pontuacaoQuizz', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: email }),
-        cache: 'no-store'
-    })
-        .then(res => res.json())
-        .then(dados => {
-            if (!dados || dados.length === 0) return;
-
-            const novaData = dados[dados.length - 1].data.split('T')[0];
-            const novaPontuacao = dados[dados.length - 1].pontuacao;
-            const ultimaData = myChartLinha.data.labels[myChartLinha.data.labels.length - 1];
-
-            if (novaData === ultimaData) {
-                myChartLinha.data.datasets[0].data[myChartLinha.data.datasets[0].data.length - 1] = novaPontuacao;
-            } else {
-                myChartLinha.data.labels.shift();
-                myChartLinha.data.labels.push(novaData);
-                myChartLinha.data.datasets[0].data.shift();
-                myChartLinha.data.datasets[0].data.push(novaPontuacao);
-            }
-
-            myChartLinha.update();
-            setTimeout(atualizarGraficoLinha, 2000);
+        fetch('/usuarios/pontuacaoQuizz', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email }),
+            cache: 'no-store'
         })
-        .catch(err => console.error("Erro ao atualizar gráfico de linha:", err));
-}
+            .then(res => res.json())
+            .then(dados => {
+                if (!dados || dados.length === 0) return;
+
+                const novaData = dados[dados.length - 1].data.split('T')[0];
+                const novaPontuacao = dados[dados.length - 1].pontuacao;
+                const ultimaData = myChartLinha.data.labels[myChartLinha.data.labels.length - 1];
+
+                if (novaData === ultimaData) {
+                    myChartLinha.data.datasets[0].data[myChartLinha.data.datasets[0].data.length - 1] = novaPontuacao;
+                } else {
+                    myChartLinha.data.labels.shift();
+                    myChartLinha.data.labels.push(novaData);
+                    myChartLinha.data.datasets[0].data.shift();
+                    myChartLinha.data.datasets[0].data.push(novaPontuacao);
+                }
+
+                myChartLinha.update();
+                setTimeout(atualizarGraficoLinha, 2000);
+            })
+            .catch(err => console.error("Erro ao atualizar gráfico de linha:", err));
+    }
 
     function atualizarGraficoPizza() {
         fetch('/usuarios/Registrados', { cache: 'no-store' })

@@ -107,10 +107,25 @@ body {
     background-color: #212124;
     border-radius: 10px;
     padding: 20px;
-    width: 45%;
+    width: 40%;
     min-width: 350px;
     height: 400px;
     box-shadow: 0 0 10px #00FF09;
+}
+
+
+.kpi {
+    background-color: #212124;
+    border-radius: 10px;
+    padding: 20px;
+    width: 40%;
+    max-width: 350px;
+    height: 200px;
+    box-shadow: 0 0 10px #00FF09;
+}
+
+.shadow-green{
+    filter: drop-shadow(0 0 10px #1B8800);
 }
 
 .grafico2{

@@ -104,11 +104,20 @@ function listar(req, res) {
 function pontuacaoQuizz(req, res) {
     const email = req.body.email;
     usuarioModel.pontuacaoQuizz(email)
-        .then(resultado => res.json(resultado))
-        .catch(erro => {
-            console.error("Erro ao buscar pontuação:", erro);
-            res.status(500).json(erro);
-        });
+        .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o inserir! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
 }
 
 function pontuacaoQuizzAvanc(req, res) {
@@ -147,44 +156,37 @@ function perfisRegistrados(req,res){
 }
 
 function insertQuizz(req,res){
+    const email = req.body.email;
+    const pontuacao = req.body.pontuacao;
 
-     usuarioModel.insertQuizz()
-        .then(function (resultado) {
-            if (resultado.length > 0) {
-                res.status(200).json(resultado);
-            } else {
-                res.status(204).send("Nenhum usuário encontrado!");
-            }
-        }).catch(function (erro) {
-            console.log(erro);
-            res.status(500).json(erro.sqlMessage);
+    usuarioModel.insertQuizz(email, pontuacao)
+        .then(resultado => {
+            res.status(200).json({ mensagem: "Pontuação inserida com sucesso" });
+        })
+        .catch(erro => {
+            console.error("Erro ao inserir no banco:", erro);
+            res.status(500).json({ erro: erro.sqlMessage || erro.message });
         });
+
 }
 
 function insertQuizzHacking(req,res){
+     const email = req.body.email;
+    const pontuacao = req.body.pontuacao;
 
-     usuarioModel.insertQuizzHacking()
-        .then(function (resultado) {
-            if (resultado.length > 0) {
-                res.status(200).json(resultado);
-            } else {
-                res.status(204).send("Nenhum usuário encontrado!");
-            }
-        }).catch(function (erro) {
+
+     usuarioModel.insertQuizzHacking(email,pontuacao)
+      
+        .catch(function (erro) {
             console.log(erro);
             res.status(500).json(erro.sqlMessage);
         });
 }
 function insertQuizzSegAvanc(req,res){
-
-     usuarioModel.insertQuizzSegAvanc()
-        .then(function (resultado) {
-            if (resultado.length > 0) {
-                res.status(200).json(resultado);
-            } else {
-                res.status(204).send("Nenhum usuário encontrado!");
-            }
-        }).catch(function (erro) {
+     const email = req.body.email;
+    const pontuacao = req.body.pontuacao;
+     usuarioModel.insertQuizzSegAvanc(email,pontuacao)
+     .catch(function (erro) {
             console.log(erro);
             res.status(500).json(erro.sqlMessage);
         });

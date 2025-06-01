@@ -31,20 +31,20 @@
             </div>
 
             <div class="btn-nav-white">
-                <a href="./cards.html">
-                    <h3>Aquários</h3>
+                <a href="../index.html">
+                    <h3>Home</h3>
                 </a>
             </div>
 
-            
+
             <div class="btn-nav">
                 <h3>Gráficos</h3>
             </div>
 
 
             <div class="btn-nav-white">
-                <a href="./mural.html">
-                    <h3>Mural de Avisos</h3>
+                <a href="./quizz.html">
+                    <h3>Quizz</h3>
                 </a>
             </div>
 
@@ -56,7 +56,23 @@
 
         <div class="dash">
             <div id="alerta"></div>
+            
             <div class="graficos-container" id="btnAquario">
+                   <div class="kpi" style="max-width: 900px; max-height: 900px;">
+                <h2 class="grafico2">Seu maior Conhecimento é em: 
+                                    <center style="font-size: 60px; font-weight: 700;" class="textGreen shadow-green"><span>Hacking</span></center></h2>
+            </div>
+            <div class="kpi" style="max-width: 900px; max-height: 900px;">
+                <h1 class="grafico2 shadow-green">
+                    <center>
+                    Ranking:<br>
+                    1°: <span>Igor</span><br>
+                    2°: <span>Sofia</span><br>
+                    3°: <span>Nilma</span><br>
+                    Você: <span>Hacking</span></center>
+                </h1>
+            </div>
+
                 <div class="grafico">
                     <center><span class="textGreen">Suas Pontuações Quizz</span></center>
                     <br><br>
@@ -68,8 +84,13 @@
                         <canvas class="opa" id="barra"></canvas>
                     </div>
                 </div>
+
+
+
             </div>
-            <div id="graficos"></div>
+
+       
+
         </div>
     </div>
 </body>
@@ -86,100 +107,102 @@
     let dadosHacking = [];
 
     function obterDados() {
-    var email = sessionStorage.EMAIL_USUARIO;
+        var email = sessionStorage.EMAIL_USUARIO;
 
-    Promise.all([
-        fetch('/usuarios/pontuacaoQuizz', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
-        }).then(res => res.json()),
+        Promise.all([
+            fetch('/usuarios/pontuacaoQuizz', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            }).then(res => res.json()),
 
-        fetch('/usuarios/pontuacaoQuizzAvanc', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
-        }).then(res => res.json()),
+            fetch('/usuarios/pontuacaoQuizzAvanc', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            }).then(res => res.json()),
 
-        fetch('/usuarios/pontuacaoQuizzHacking', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
-        }).then(res => res.json())
-    ])
-    .then(([basico, avancado, hacking]) =>{
-        dadosBasico = basico;
-        dadosAvancado = avancado;
-        dadosHacking = hacking;
-        plotarGraficoLinha(basico, avancado, hacking);
-    })
-    .catch(err => console.error("Erro ao buscar dados dos quizzes:", err));
+            fetch('/usuarios/pontuacaoQuizzHacking', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            }).then(res => res.json())
+        ])
+            .then(([basico, avancado, hacking]) => {
+                dadosBasico = basico;
+                dadosAvancado = avancado;
+                dadosHacking = hacking;
+                plotarGraficoLinha(basico, avancado, hacking);
+            })
+            .catch(err => console.error("Erro ao buscar dados dos quizzes:", err));
 
-    fetch('/usuarios/Registrados')
-        .then(res => res.json())
-        .then(data => plotarGraficoPizza(data))
-        .catch(err => console.log("Erro ao buscar dados de registrados:", err));
-}
-   
+        fetch('/usuarios/Registrados')
+            .then(res => res.json())
+            .then(data => plotarGraficoPizza(data))
+            .catch(err => console.log("Erro ao buscar dados de registrados:", err));
+    }
+
     function plotarGraficoLinha(basico, avancado, hacking) {
-    let pontuacoesBasico = [];
-    let pontuacoesAvancado = [];
-    let pontuacoesHacking = [];
+        let pontuacoesBasico = [];
+        let pontuacoesAvancado = [];
+        let pontuacoesHacking = [];
 
-    // Coletando pontuações
-    for (let i = 0; i < basico.length; i++) {
-        pontuacoesBasico.push(basico[i].pontuacao);
-    }
-
-    for (let i = 0; i < avancado.length; i++) {
-        pontuacoesAvancado.push(avancado[i].pontuacao);
-    }
-
-    for (let i = 0; i < hacking.length; i++) {
-        pontuacoesHacking.push(hacking[i].pontuacao);
-    }
-
-    // Criando rotulos (tentativas)
-    let maiorQtd = Math.max(pontuacoesBasico.length, pontuacoesAvancado.length, pontuacoesHacking.length);
-    let labels = [];
-    for (let i = 0; i < maiorQtd; i++) {
-        labels.push(`Tentativa ${i + 1}`);
-    }
-
-    const ctx = document.getElementById('linha').getContext('2d');
-    myChartLinha = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Acertos Seg. Basic.',
-                    data: pontuacoesBasico,
-                    backgroundColor: ['#00FF09'],
-                    borderColor: ['#00FF09'],
-                    borderWidth: 1,
-                    tension: 0.2
-                },
-                {
-                    label: 'Acertos Seg. Avanç.',
-                    data: pontuacoesAvancado,
-                    backgroundColor: ['#bffe1b'],
-                    borderColor: ['#bffe1b'],
-                    borderWidth: 1,
-                    tension: 0.2
-                },
-                {
-                    label: 'Acertos Hacking',
-                    data: pontuacoesHacking,
-                    backgroundColor: ['#67bb87'],
-                    borderColor: ['#67bb87'],
-                    borderWidth: 1,
-                    tension: 0.2
-                }
-            ]
+        // Coletando pontuações
+        for (let i = 0; i < basico.length; i++) {
+            pontuacoesBasico.push(basico[i].pontuacao);
         }
-    });
-}
+
+        for (let i = 0; i < avancado.length; i++) {
+            pontuacoesAvancado.push(avancado[i].pontuacao);
+        }
+
+        for (let i = 0; i < hacking.length; i++) {
+            pontuacoesHacking.push(hacking[i].pontuacao);
+        }
+
+        // Criando rotulos (tentativas)
+        let maiorQtd = Math.max(pontuacoesBasico.length, pontuacoesAvancado.length, pontuacoesHacking.length);
+        let labels = [];
+        for (let i = 0; i < maiorQtd; i++) {
+            labels.push(`Tentativa ${i + 1}`);
+        }
+
+        const ctx = document.getElementById('linha').getContext('2d');
+        myChartLinha = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Acertos Seg. Basic.',
+                        data: pontuacoesBasico,
+                        backgroundColor: ['#00FF09'],
+                        borderColor: ['#00FF09'],
+                        borderWidth: 1,
+                        tension: 0.2
+                    },
+                    {
+                        label: 'Acertos Seg. Avanç.',
+                        data: pontuacoesAvancado,
+                        backgroundColor: ['#bffe1b'],
+                        borderColor: ['#bffe1b'],
+                        borderWidth: 1,
+                        tension: 0.2
+                    },
+                    {
+                        label: 'Acertos Hacking',
+                        data: pontuacoesHacking,
+                        backgroundColor: ['#67bb87'],
+                        borderColor: ['#67bb87'],
+                        borderWidth: 1,
+                        tension: 0.2
+                    }
+                ]
+            }
+        });
+
+        atualizarGraficoLinha();
+    }
 
     function plotarGraficoPizza(dados) {
         let unidades = [];

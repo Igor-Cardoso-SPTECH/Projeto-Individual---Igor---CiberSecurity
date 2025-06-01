@@ -34,13 +34,13 @@ router.get("/Registrados", function (req, res) {
 });
 
 
-router.get("/quizz", function (req, res) {
+router.post("/quizz", function (req, res) {
     usuarioController.insertQuizz(req, res);
 });
-router.get("/quizzAvanc", function (req, res) {
+router.post("/quizzAvanc", function (req, res) {
     usuarioController.insertQuizzSegAvanc(req, res);
 });
-router.get("/quizzHacking", function (req, res) {
+router.post("/quizzHacking", function (req, res) {
     usuarioController.insertQuizzHacking(req, res);
 });
 

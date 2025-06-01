@@ -51,7 +51,9 @@ on p.id = u.perfil
 group by descricao;`
 return database.executar(instrucaoSql);}
 
+
 function insertQuizz(email,pontuacao){
+    console.log("to no final",email,pontuacao)
 
 var instrucaoSql = `insert into quizzSegBasic (pontuacao, id_usuario) values
 (${pontuacao}, (select id from usuario where email = '${email}'));`
@@ -66,7 +68,7 @@ return database.executar(instrucaoSql);
 }
 
 function insertQuizzSegAvanc(email,pontuacao){
-
+console.log("passou model")
 var instrucaoSql = `insert into quizzSegAvanc(pontuacao, id_usuario) values
 (${pontuacao}, (select id from usuario where email = '${email}'));`
 return database.executar(instrucaoSql);

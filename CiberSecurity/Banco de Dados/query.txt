@@ -1,14 +1,14 @@
-
 create database cybersecurity;
-
 use cybersecurity;
 
+-- Tabela: perfil
 CREATE TABLE perfil (
-  id int NOT NULL AUTO_INCREMENT,
-  descricao varchar(45) not null,
-  idUsuario int,
-  PRIMARY KEY (id));
-  
+  id INT NOT NULL AUTO_INCREMENT,
+  descricao VARCHAR(45) NOT NULL,
+  idUsuario INT DEFAULT NULL,
+  PRIMARY KEY (id)
+);
+
 insert into perfil (descricao)values 
 ('Entusiasta'),
 ('Hacker Ativo'),
@@ -17,76 +17,116 @@ insert into perfil (descricao)values
 ('Especialista em segurança');
 
 
+-- Tabela: usuario
+
 CREATE TABLE usuario (
-  id int NOT NULL AUTO_INCREMENT,
-  nome varchar(45) not null,
-  email varchar(50) not null,
-  senha varchar(30)not null,
-  perfil int not null,
+  id INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(45) NOT NULL,
+  email VARCHAR(50) NOT NULL,
+  senha VARCHAR(30) NOT NULL,
+  perfil INT NOT NULL,
   PRIMARY KEY (id),
   KEY perfil (perfil),
-  CONSTRAINT usuariofk1 FOREIGN KEY (perfil) REFERENCES perfil (id)
+  CONSTRAINT FOREIGN KEY (perfil) REFERENCES perfil (id)
+) ;
+
+-- Tabela: quizzHacking
+CREATE TABLE quizzHacking (
+  id INT NOT NULL AUTO_INCREMENT,
+  pontuacao INT NOT NULL,
+  id_usuario INT NOT NULL,
+  data DATETIME DEFAULT (current_time()),
+  PRIMARY KEY (id),
+  KEY id_usuario (id_usuario),
+  CONSTRAINT FOREIGN KEY (id_usuario) REFERENCES usuario (id)
 );
 
-create table quizz (
-id int primary key auto_increment,
-pontuacao int not null, 
-id_usuario int not null,
-data datetime default(current_time),
-foreign key(id_usuario) references usuario(id));
+-- Tabela: quizzSegAvanc
+CREATE TABLE quizzSegAvanc (
+  id INT NOT NULL AUTO_INCREMENT,
+  pontuacao INT NOT NULL,
+  id_usuario INT NOT NULL,
+  data DATETIME DEFAULT (current_time()),
+  PRIMARY KEY (id),
+  KEY id_usuario (id_usuario),
+  CONSTRAINT FOREIGN KEY (id_usuario) REFERENCES usuario (id)
+);
+
+-- Tabela: quizzSegBasic
+CREATE TABLE quizzSegBasic (
+  id INT NOT NULL AUTO_INCREMENT,
+  pontuacao INT NOT NULL,
+  id_usuario INT NOT NULL,
+  data DATETIME DEFAULT (current_time()),
+  PRIMARY KEY (id),
+  KEY id_usuario (id_usuario),
+  CONSTRAINT FOREIGN KEY (id_usuario) REFERENCES usuario (id)
+);
 
 
-create table senhas(
-id int primary key auto_increment,
-senha int, 
-usuario int,
-foreign key (usuario) references usuario(id));
 
 
 
-/*---------------------------------SENHAS DO USUARIO--------------------------------*/
-
-select u.nome "Nome usuario", s.senha "Senhas Criadas" from usuario u
-inner join senhas s
-on s.usuario = u.id
-where u.email = 'cardosoigor113@gmail.com';
-
-/*--------------------------------USUARIO E SENHA---------------------------------*/
-
-SELECT * FROM usuario WHERE email = 'cardosoigor113@gmail.com' AND senha = '123';
 
 
-/*-----------------------------usuarios cadastrados-----------------------------------*/
-create view vw_usuarios as
-select nome, descricao from usuario u
-inner join perfil p
-on p.id = u.perfil; 
 
-select * from vw_usuarios;
+-- vw_quizzHacking
+CREATE VIEW vw_quizzHacking AS
+SELECT q.id AS idQuizz,  q.id_usuario,  q.pontuacao,  u.email,  q.data
+FROM   usuario u
+JOIN quizzHacking q ON u.id = q.id_usuario
+ORDER BY 
+  q.id_usuario;
 
-/*-----------------------------------QUIZZ DO USUARIO------------------------------*/
-alter view vw_quizz as
-select q.id idQuizz, id_usuario, pontuacao, email, data from usuario u
-inner join  quizz q
-on u.id = id_usuario order by id_usuario;
+--  vw_quizzSegAvanc
+CREATE VIEW vw_quizzSegAvanc AS
+SELECT   q.id AS idQuizz,  q.id_usuario,  q.pontuacao,  u.email,  q.data
+FROM  usuario u
+JOIN quizzSegAvanc q ON u.id = q.id_usuario
+ORDER BY q.id_usuario;
 
-select pontuacao, data from vw_quizz where email = 'cardosoigor113@gmail.com' order by idQuizz;
+-- vw_quizzSegBasic
+CREATE VIEW vw_quizzSegBasic AS
+SELECT q.id AS idQuizz,  q.id_usuario,  q.pontuacao,  u.email,  q.data 
+FROM usuario u
+JOIN quizzSegBasic q ON u.id = q.id_usuario
+ORDER BY q.id_usuario;
+
+-- vw_usuarios
+CREATE VIEW vw_usuarios AS
+SELECT   u.nome,  p.descricao
+FROM usuario u
+JOIN perfil p ON p.id = u.perfil;
 
 
-insert into quizz (pontuacao,id_usuario) values
-(13,1),
-(20,1),
-(31,2),
-(27,2),
-(13,3),
-(28,3),
-(26,4),
-(9,4),
-(8,5),
-(30,5);
 
-insert into quizz (pontuacao, id_usuario) values
-(19, (select id from usuario where email = 'cardosoigor113@gmail.com'));
 
-select * from quizz;
-truncate table quizz;
+
+
+-- vw_opontos
+create view vw_pontos as
+select nome, id,
+	   (select sum(pontuacao) from quizzSegBasic where u.id = id_usuario) as 'Segurança Basica',
+	   (select sum(pontuacao) from quizzSegAvanc where u.id = id_usuario) as  'Segurança Avançada',
+       (select sum(pontuacao) from quizzHacking  where u.id = id_usuario) as  'Hacking'
+       from usuario u where email = 'cardosoigor113@gmail.com' group by id ;
+
+
+
+select nome, id,
+	   (select sum(pontuacao) from quizzSegBasic where u.id = id_usuario) as 'Segurança Basica',
+	   (select sum(pontuacao) from quizzSegAvanc where u.id = id_usuario) as  'Segurança Avançada',
+       (select sum(pontuacao) from quizzHacking  where u.id = id_usuario) as  'Hacking'
+       from usuario u where email = 'sofia@email' group by id ;
+
+
+
+select * from usuario;
+
+truncate table quizzSegBasic;
+truncate table quizzSegAvanc;
+truncate table quizzHacking;
+
+select * from quizzSegBasic;
+select * from quizzSegAvanc;
+select * from quizzHacking;

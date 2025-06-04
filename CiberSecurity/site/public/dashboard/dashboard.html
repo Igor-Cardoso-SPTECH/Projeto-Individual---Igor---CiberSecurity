@@ -22,7 +22,7 @@
     <script src="https://kit.fontawesome.com/9f7414eb10.js" crossorigin="anonymous"></script>
 </head>
 
-<body onload="obterDados(),validarSessao();">
+<body onload="obterDados(),validarSessao(),plotarKPIConhecimento(),plotarLiderBoard();">
     <div class="janela">
         <div class="header-left">
             <h1>Cybersecurity</h1>
@@ -31,7 +31,8 @@
             </div>
 
             <div class="btn-nav-white">
-                <a href="../index.html">
+                <a href=".././CiberSecurity/index.html">
+                   
                     <h3>Home</h3>
                 </a>
             </div>
@@ -56,22 +57,24 @@
 
         <div class="dash">
             <div id="alerta"></div>
-            
+
             <div class="graficos-container" id="btnAquario">
-                   <div class="kpi" style="max-width: 900px; max-height: 900px;">
-                <h2 class="grafico2">Seu maior Conhecimento é em: 
-                                    <center style="font-size: 60px; font-weight: 700;" class="textGreen shadow-green"><span>Hacking</span></center></h2>
-            </div>
-            <div class="kpi" style="max-width: 900px; max-height: 900px;">
-                <h1 class="grafico2 shadow-green">
-                    <center>
-                    Ranking:<br>
-                    1°: <span>Igor</span><br>
-                    2°: <span>Sofia</span><br>
-                    3°: <span>Nilma</span><br>
-                    Você: <span>Hacking</span></center>
-                </h1>
-            </div>
+                <div class="kpi" style="max-width: 900px; max-height: 900px;">
+                    <h2 class="grafico2">Seu maior Conhecimento é em:
+                        <center style="font-size: 60px; font-weight: 700;" class="textGreen shadow-green"><span
+                                id="kpi_Conhecimento"></span></center>
+                    </h2>
+                </div>
+                <div class="kpi" style="max-width: 9000px; max-height: 900px;">
+                    <h1 class="grafico2 shadow-green">
+                        <center>
+                            <span style="color:#00FF09;">Ranking Total de Acertos:</span><br>
+                            <span style="color:#00FF09;">1°:</span> <span id="primeiro"></span><br>
+                            <span style="color:#00FF09;">2°:</span> <span id="segundo"></span><br>
+                            <span style="color:#00FF09;">3°:</span> <span id="terceiro"></span><br>
+                        </center>
+                    </h1>
+                </div>
 
                 <div class="grafico">
                     <center><span class="textGreen">Suas Pontuações Quizz</span></center>
@@ -89,7 +92,7 @@
 
             </div>
 
-       
+
 
         </div>
     </div>
@@ -140,6 +143,8 @@
             .then(res => res.json())
             .then(data => plotarGraficoPizza(data))
             .catch(err => console.log("Erro ao buscar dados de registrados:", err));
+
+
     }
 
     function plotarGraficoLinha(basico, avancado, hacking) {
@@ -296,5 +301,63 @@
             .catch(err => console.error("Erro ao atualizar gráfico de pizza:", err));
     }
 
+    function plotarKPIConhecimento() {
+        var email = sessionStorage.EMAIL_USUARIO;
+
+        fetch('/usuarios/kpiConhecimento', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+        })
+            .then(res => res.json())
+            .then(function (usuarios) {
+
+                const maiorConhecimento = usuarios[0].Conhecimento
+                console.log('Maior conhecimento:', maiorConhecimento);
+                kpi_Conhecimento.innerHTML = maiorConhecimento;
+
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+    }
+
+    function plotarLiderBoard() {
+        var email = sessionStorage.EMAIL_USUARIO;
+
+        fetch('/usuarios/plotarLiderBoard', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(res => res.json())
+            .then(function (usuarios) {
+                console.log(usuarios)
+
+                if (usuarios[0] != null) {
+                    const primeiroLugar = usuarios[0].nome
+                    primeiro.innerHTML = primeiroLugar
+                } else {
+                    primeiro.innerHTML = 'Ninguém na posição'
+                }
+
+                if (usuarios[1] != null) {
+                    const segundoLugar = usuarios[1].nome
+                    segundo.innerHTML = segundoLugar
+                } else { segundo.innerHTML = 'Ninguém na posição' }
+
+
+                if (usuarios[2] != null) {
+                    const terceiroLugar = usuarios[2].nome
+                    terceiro.innerHTML = terceiroLugar
+                } else {
+                    terceiro.innerHTML = 'Ninguém na posição'
+                }
+
+
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`)
+            });
+    }
 
 </script>

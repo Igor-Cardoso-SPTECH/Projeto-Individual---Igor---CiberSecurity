@@ -33,7 +33,6 @@ router.get("/Registrados", function (req, res) {
     usuarioController.perfisRegistrados(req, res);
 });
 
-
 router.post("/quizz", function (req, res) {
     usuarioController.insertQuizz(req, res);
 });
@@ -44,12 +43,13 @@ router.post("/quizzHacking", function (req, res) {
     usuarioController.insertQuizzHacking(req, res);
 });
 
+router.post("/kpiConhecimento", function (req, res) {
+    usuarioController.kpiConhecimento(req, res);
+});
 
-
-
-
-
-
+router.post("/plotarLiderBoard", function (req, res) {
+    usuarioController.plotarLiderBoard(req, res);
+});
 
 
 module.exports = router;

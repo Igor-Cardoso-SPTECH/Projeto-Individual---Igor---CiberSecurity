@@ -9,7 +9,7 @@ CREATE TABLE perfil (
   PRIMARY KEY (id)
 );
 
-insert into perfil (descricao)values 
+insert into perfil (descricao)values
 ('Entusiasta'),
 ('Hacker Ativo'),
 ('Estudante CiberSecurity'),
@@ -75,7 +75,7 @@ CREATE VIEW vw_quizzHacking AS
 SELECT q.id AS idQuizz,  q.id_usuario,  q.pontuacao,  u.email,  q.data
 FROM   usuario u
 JOIN quizzHacking q ON u.id = q.id_usuario
-ORDER BY 
+ORDER BY
   q.id_usuario;
 
 --  vw_quizzSegAvanc
@@ -87,7 +87,7 @@ ORDER BY q.id_usuario;
 
 -- vw_quizzSegBasic
 CREATE VIEW vw_quizzSegBasic AS
-SELECT q.id AS idQuizz,  q.id_usuario,  q.pontuacao,  u.email,  q.data 
+SELECT q.id AS idQuizz,  q.id_usuario,  q.pontuacao,  u.email,  q.data
 FROM usuario u
 JOIN quizzSegBasic q ON u.id = q.id_usuario
 ORDER BY q.id_usuario;
@@ -117,7 +117,57 @@ select nome, id,
 	   (select sum(pontuacao) from quizzSegBasic where u.id = id_usuario) as 'Segurança Basica',
 	   (select sum(pontuacao) from quizzSegAvanc where u.id = id_usuario) as  'Segurança Avançada',
        (select sum(pontuacao) from quizzHacking  where u.id = id_usuario) as  'Hacking'
-       from usuario u where email = 'sofia@email' group by id ;
+       from usuario u where email = 'igor@email' group by id ;
+
+
+select nome, id,
+	   (select sum(pontuacao) from quizzSegBasic where u.id = id_usuario) as 'Segurança Basica',
+	   (select sum(pontuacao) from quizzSegAvanc where u.id = id_usuario) as  'Segurança Avançada',
+       (select sum(pontuacao) from quizzHacking  where u.id = id_usuario) as  'Hacking'
+       from usuario u where email = 'cardosoigor113@gmail.com' group by id ;
+
+
+select nome, id,
+	   (select sum(pontuacao) from quizzSegBasic where u.id = id_usuario) as 'Segurança Basica',
+	   (select sum(pontuacao) from quizzSegAvanc where u.id = id_usuario) as  'Segurança Avançada',
+       (select sum(pontuacao) from quizzHacking  where u.id = id_usuario) as  'Hacking'
+       from usuario u where email = 'cardosoigor113@gmail.com' group by id ;
+
+select  nome, id,
+    greatest(
+        (select sum(pontuacao) from quizzSegBasic where id_usuario = u.id) as 'Segurança Basica',
+        (select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id) as  'Segurança Avançada',
+        (select sum(pontuacao) from quizzHacking where id_usuario = u.id) as  'Hacking'
+    ) as conhecimento
+from usuario u where email = 'cardosoigor113@gmail.com' group by id;
+
+
+select
+  case greatest(
+    (select sum(pontuacao) from quizzSegBasic where id_usuario = u.id),
+    (select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id),
+    (select sum(pontuacao) from quizzHacking where id_usuario = u.id)
+  )
+    when (select sum(pontuacao) from quizzSegBasic where id_usuario = u.id) then 'segurança básica'
+    when (select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id) then 'segurança avançada'
+    when (select sum(pontuacao) from quizzHacking where id_usuario = u.id) then 'hacking'
+    else 'Faça um quizz'
+  end as 'Conhecimento'
+from usuario u
+where email = 'cardosoigor113@gmail.com';
+
+
+select nome, id,
+    (
+        coalesce((select sum(pontuacao) from quizzSegBasic where id_usuario = u.id),0)+
+	   coalesce((select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id),0)+
+	    coalesce((select sum(pontuacao) from quizzHacking where id_usuario = u.id),0)
+    ) as total_pontuacao
+from usuario u
+group by id
+order by total_pontuacao desc
+limit 3;
+
 
 
 

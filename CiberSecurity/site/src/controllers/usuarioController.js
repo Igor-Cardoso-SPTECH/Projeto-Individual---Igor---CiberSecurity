@@ -182,6 +182,7 @@ function insertQuizzHacking(req,res){
             res.status(500).json(erro.sqlMessage);
         });
 }
+
 function insertQuizzSegAvanc(req,res){
      const email = req.body.email;
     const pontuacao = req.body.pontuacao;
@@ -190,6 +191,40 @@ function insertQuizzSegAvanc(req,res){
             console.log(erro);
             res.status(500).json(erro.sqlMessage);
         });
+}
+
+function insertQuizzSegAvanc(req,res){
+     const email = req.body.email;
+    const pontuacao = req.body.pontuacao;
+     usuarioModel.insertQuizzSegAvanc(email,pontuacao)
+     .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage);
+        });
+}
+
+function kpiConhecimento(req, res){
+    const email = req.body.email;
+    usuarioModel.kpiConhecimento(email)
+    .then(function(resultados) {
+        res.json(resultados);
+    })
+    .catch(function (erro) {
+        console.log(erro);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+function plotarLiderBoard(req, res){
+    
+    usuarioModel.plotarLiderBoard()
+    .then(function(resultados) {
+        res.json(resultados);
+    })
+    .catch(function (erro) {
+        console.log(erro);
+        res.status(500).json(erro.sqlMessage);
+    });
 }
 
 
@@ -203,5 +238,7 @@ module.exports = {
     pontuacaoQuizzHacking,
     insertQuizz,
     insertQuizzHacking,
-    insertQuizzSegAvanc
+    insertQuizzSegAvanc,
+    kpiConhecimento,
+    plotarLiderBoard
 }

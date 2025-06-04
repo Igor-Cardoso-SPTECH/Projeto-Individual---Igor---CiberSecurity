@@ -49,31 +49,63 @@ function perfisRegistrados() {
 inner join perfil p 
 on p.id = u.perfil
 group by descricao;`
-return database.executar(instrucaoSql);}
-
-
-function insertQuizz(email,pontuacao){
-    console.log("to no final",email,pontuacao)
-
-var instrucaoSql = `insert into quizzSegBasic (pontuacao, id_usuario) values
-(${pontuacao}, (select id from usuario where email = '${email}'));`
-return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
-function insertQuizzHacking(email,pontuacao){
+function insertQuizz(email, pontuacao) {
+    console.log("to no final", email, pontuacao)
 
-var instrucaoSql = `insert into quizzHacking(pontuacao, id_usuario) values
+    var instrucaoSql = `insert into quizzSegBasic (pontuacao, id_usuario) values
 (${pontuacao}, (select id from usuario where email = '${email}'));`
-return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
-function insertQuizzSegAvanc(email,pontuacao){
-console.log("passou model")
-var instrucaoSql = `insert into quizzSegAvanc(pontuacao, id_usuario) values
+function insertQuizzHacking(email, pontuacao) {
+
+    var instrucaoSql = `insert into quizzHacking(pontuacao, id_usuario) values
 (${pontuacao}, (select id from usuario where email = '${email}'));`
-return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
+function insertQuizzSegAvanc(email, pontuacao) {
+    console.log("passou model")
+    var instrucaoSql = `insert into quizzSegAvanc(pontuacao, id_usuario) values
+(${pontuacao}, (select id from usuario where email = '${email}'));`
+    return database.executar(instrucaoSql);
+}
+
+function kpiConhecimento(email) {
+    console.log("passou model")
+    var instrucaoSql = `select
+  case greatest(
+    (select sum(pontuacao) from quizzSegBasic where id_usuario = u.id),
+    (select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id),
+    (select sum(pontuacao) from quizzHacking where id_usuario = u.id)
+  )
+    when (select sum(pontuacao) from quizzSegBasic where id_usuario = u.id) then 'Segurança Básica'
+    when (select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id) then 'Segurança Avançada'
+    when (select sum(pontuacao) from quizzHacking where id_usuario = u.id) then 'Hacking'
+    else 'Nenhum quizz feito ainda'
+  end as 'Conhecimento'
+from usuario u
+where email = '${email}';`
+    return database.executar(instrucaoSql);
+}
+
+function plotarLiderBoard() {
+    console.log("passou model")
+    var instrucaoSql = `select nome, id,
+    (
+       (select sum(pontuacao) from quizzSegBasic where id_usuario = u.id) +
+	   (select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id) +
+	   (select sum(pontuacao) from quizzHacking where id_usuario = u.id)
+    ) as total_pontuacao
+from usuario u
+group by id
+order by total_pontuacao desc
+limit 3;`
+    return database.executar(instrucaoSql);
+}
 
 module.exports = {
     autenticar,
@@ -85,5 +117,7 @@ module.exports = {
     pontuacaoQuizzHacking,
     insertQuizz,
     insertQuizzHacking,
-    insertQuizzSegAvanc
+    insertQuizzSegAvanc,
+    kpiConhecimento,
+    plotarLiderBoard
 };

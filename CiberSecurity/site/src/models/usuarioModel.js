@@ -77,18 +77,25 @@ function insertQuizzSegAvanc(email, pontuacao) {
 function kpiConhecimento(email) {
     console.log("passou model")
     var instrucaoSql = `select
-  case greatest(
-    (select sum(pontuacao) from quizzSegBasic where id_usuario = u.id),
-    (select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id),
-    (select sum(pontuacao) from quizzHacking where id_usuario = u.id)
-  )
-    when (select sum(pontuacao) from quizzSegBasic where id_usuario = u.id) then 'Segurança Básica'
-    when (select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id) then 'Segurança Avançada'
-    when (select sum(pontuacao) from quizzHacking where id_usuario = u.id) then 'Hacking'
-    else 'Nenhum quizz feito ainda'
-  end as 'Conhecimento'
+  case 
+    when
+      coalesce((select sum(pontuacao) from quizzSegBasic where id_usuario = u.id), 0) = 0 and
+      coalesce((select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id), 0) = 0 and
+      coalesce((select sum(pontuacao) from quizzHacking where id_usuario = u.id), 0) = 0
+    then 'faça um quizz'
+    else case greatest(
+      coalesce((select sum(pontuacao) from quizzSegBasic where id_usuario = u.id), 0),
+      coalesce((select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id), 0),
+      coalesce((select sum(pontuacao) from quizzHacking where id_usuario = u.id), 0)
+    )
+      when coalesce((select sum(pontuacao) from quizzSegBasic where id_usuario = u.id), 0) then 'Segurança Básica'
+      when coalesce((select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id), 0) then 'Segurança Avançada'
+      when coalesce((select sum(pontuacao) from quizzHacking where id_usuario = u.id), 0) then 'Hacking'
+    end
+  end as Conhecimento
 from usuario u
-where email = '${email}';`
+where email = '${email}';
+`
     return database.executar(instrucaoSql);
 }
 

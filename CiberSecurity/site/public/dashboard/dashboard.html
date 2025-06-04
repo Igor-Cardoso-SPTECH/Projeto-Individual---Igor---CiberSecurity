@@ -32,7 +32,7 @@
 
             <div class="btn-nav-white">
                 <a href=".././CiberSecurity/index.html">
-                   
+
                     <h3>Home</h3>
                 </a>
             </div>
@@ -151,6 +151,8 @@
         let pontuacoesBasico = [];
         let pontuacoesAvancado = [];
         let pontuacoesHacking = [];
+        console.log(basico);
+        console.log(basico[0].pontuacao);
 
         // Coletando pontuações
         for (let i = 0; i < basico.length; i++) {
@@ -171,6 +173,7 @@
         for (let i = 0; i < maiorQtd; i++) {
             labels.push(`Tentativa ${i + 1}`);
         }
+
 
         const ctx = document.getElementById('linha').getContext('2d');
         myChartLinha = new Chart(ctx, {
@@ -259,15 +262,15 @@
             .then(dados => {
                 if (!dados || dados.length === 0) return;
 
-                const novaData = dados[dados.length - 1].data.split('T')[0];
                 const novaPontuacao = dados[dados.length - 1].pontuacao;
-                const ultimaData = myChartLinha.data.labels[myChartLinha.data.labels.length - 1];
+                const ultimaPontuacao = myChartLinha.data.datasets[0].data[myChartLinha.data.datasets[0].data.length - 1];
 
-                if (novaData === ultimaData) {
+                if (novaPontuacao === ultimaPontuacao) {
                     myChartLinha.data.datasets[0].data[myChartLinha.data.datasets[0].data.length - 1] = novaPontuacao;
                 } else {
+                    const proximaTentativa = `Tentativa ${myChartLinha.data.labels.length + 1}`;
                     myChartLinha.data.labels.shift();
-                    myChartLinha.data.labels.push(novaData);
+                    myChartLinha.data.labels.push(proximaTentativa);
                     myChartLinha.data.datasets[0].data.shift();
                     myChartLinha.data.datasets[0].data.push(novaPontuacao);
                 }

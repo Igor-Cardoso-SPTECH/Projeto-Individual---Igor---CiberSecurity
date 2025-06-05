@@ -101,14 +101,13 @@ where email = '${email}';
 
 function plotarLiderBoard() {
     console.log("passou model")
-    var instrucaoSql = `select nome, id,
+    var instrucaoSql = `select u.nome, u.id,
     (
-       (select sum(pontuacao) from quizzSegBasic where id_usuario = u.id) +
-	   (select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id) +
-	   (select sum(pontuacao) from quizzHacking where id_usuario = u.id)
+        coalesce((select sum(pontuacao) from quizzSegBasic where id_usuario = u.id), 0) +
+        coalesce((select sum(pontuacao) from quizzSegAvanc where id_usuario = u.id), 0) +
+        coalesce((select sum(pontuacao) from quizzHacking  where id_usuario = u.id), 0)
     ) as total_pontuacao
 from usuario u
-group by id
 order by total_pontuacao desc
 limit 3;`
     return database.executar(instrucaoSql);

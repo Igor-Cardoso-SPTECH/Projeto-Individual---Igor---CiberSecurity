@@ -31,7 +31,8 @@
         <li><a href="./CiberSecurity/index.html">Home</a></li>
         <li><a href="./CiberSecurity/seguranca.html">Como se Proteger?</a></li>
         <li><a href="./CiberSecurity/hacking.html">Hacking</a></li>
-        <li><a href="./dashboard/dashboard.html">Dashboard</a></li>  
+        <li><a href="./dashboard/dashboard.html">Dashboard</a></li>
+        <li><a href="./dashboard/quizz.html">Quizz</a></li>
         <li><a href="./login.html">Login</a></li>
         <li class="agora"><a href="./cadastro.html">Cadastro</a></li>
 
@@ -131,17 +132,29 @@
       cardErro.style.display = "block";
       mensagem_erro.innerHTML =
         "Ainda há campos em branco";
-
+      setInterval(sumirMensagem, 5000)
       finalizarAguardar();
-      return false;
-    } else {
-      setInterval(sumirMensagem, 5000);
+      return false
     }
 
 
+    if (senhaVar != confirmacaoSenhaVar) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML =
+        "As senhas estão divergentes";
+      setInterval(sumirMensagem, 3000)
+      return
 
+    }
 
+    if (senhaVar.length < 6) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML =
+        "A senha deve ter no minimo 6 digitos";
+      setInterval(sumirMensagem, 3000)
+      return false
 
+    }
 
     // Verificando se email já foi usado
 

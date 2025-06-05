@@ -230,7 +230,7 @@
                 });
         } else if (pressionado3) {
             fetch('/usuarios/quizzHacking', {
-               method: 'POST',
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     email: emailVar,
@@ -257,6 +257,8 @@
 
         let alternativaCorreta = null // variável para armazenar a alternativa correta
 
+       // forEach? Ele recebe uma função de callback que pode ter até três parâmetros: o valor atual, o índice e o array original.
+        
         options.forEach((option) => {
             if (option.value === respostaQuestaoAtual) {
                 console.log("alternativaCorreta está no componente: " + alternativaCorreta)
@@ -348,169 +350,168 @@
     }
 
     function quizzBasic() {
-
-      var questoesBasicas = [
-    {
-        pergunta: "No contexto de segurança da informação, qual é a principal característica da engenharia social?",
-        alternativaA: "Ataques automatizados via malware.",
-        alternativaB: "Manipulação psicológica para explorar vulnerabilidades humanas.",
-        alternativaC: "Uso de criptografia para proteger dados.",
-        alternativaD: "Desenvolvimento de firewalls corporativos.",
-        alternativaCorreta: "alternativaB"
-    },
-    {
-        pergunta: "Qual das funções abaixo melhor descreve o papel de um firewall corporativo?",
-        alternativaA: "Realiza backups automáticos do sistema.",
-        alternativaB: "Controla o fluxo de tráfego baseado em regras de segurança.",
-        alternativaC: "Detecta vulnerabilidades em aplicativos web.",
-        alternativaD: "Garante integridade dos dados em servidores.",
-        alternativaCorreta: "alternativaB"
-    },
-    {
-        pergunta: "O termo 'Zero Day' refere-se a:",
-        alternativaA: "Atualizações regulares de segurança.",
-        alternativaB: "Um tipo de ataque de negação de serviço.",
-        alternativaC: "Uma vulnerabilidade recém-descoberta, ainda sem correção disponível.",
-        alternativaD: "Um método de autenticação multifator.",
-        alternativaCorreta: "alternativaC"
-    },
-    {
-        pergunta: "Qual a abordagem recomendada para armazenamento seguro de senhas em sistemas modernos?",
-        alternativaA: "Guardar senhas em arquivos criptografados simetricamente.",
-        alternativaB: "Enviar senhas criptografadas por e-mail.",
-        alternativaC: "Uso de hashes criptográficos com salt para dificultar ataques.",
-        alternativaD: "Armazenar senhas em texto simples com backups frequentes.",
-        alternativaCorreta: "alternativaC"
-    },
-    {
-        pergunta: "Autenticação multifator (MFA) combina elementos para aumentar a segurança. Qual das opções NÃO é um fator típico utilizado?",
-        alternativaA: "Algo que você tem (token).",
-        alternativaB: "Algo que você deseja (preferência pessoal).",
-        alternativaC: "Algo que você sabe (senha).",
-        alternativaD: "Algo que você é (biometria).",
-        alternativaCorreta: "alternativaB"
-    },
-    {
-        pergunta: "Qual é o principal mecanismo de ataque utilizado em phishing?",
-        alternativaA: "Exploração de protocolos de rede para captura de pacotes.",
-        alternativaB: "Engenharia social para capturar dados em sites falsos.",
-        alternativaC: "Instalação automática de malwares via exploits.",
-        alternativaD: "Ataques de força bruta em sistemas de autenticação.",
-        alternativaCorreta: "alternativaB"
-    },
-    {
-        pergunta: "Qual das alternativas representa uma consequência direta de um ataque de phishing bem-sucedido?",
-        alternativaA: "Exposição de logs para auditoria.",
-        alternativaB: "Comprometimento de credenciais e possível instalação de malware.",
-        alternativaC: "Aumento da largura de banda.",
-        alternativaD: "Diminuição do desempenho da rede.",
-        alternativaCorreta: "alternativaB"
-    },
-    {
-        pergunta: "Qual das medidas a seguir é mais eficaz para mitigar ataques de phishing?",
-        alternativaA: "Desabilitar filtros de e-mail.",
-        alternativaB: "Usar redes públicas para acesso remoto.",
-        alternativaC: "Implementar autenticação multifator e treinamentos de conscientização.",
-        alternativaD: "Ignorar atualizações do sistema.",
-        alternativaCorreta: "alternativaC"
-    },
-    {
-        pergunta: "Ransomware é um tipo de malware que:",
-        alternativaA: "Atualiza sistemas automaticamente.",
-        alternativaB: "Desativa firewalls.",
-        alternativaC: "Monitoriza atividades de rede.",
-        alternativaD: "Criptografa arquivos e exige pagamento para liberação.",
-        alternativaCorreta: "alternativaD"
-    },
-    {
-        pergunta: "Qual a estratégia mais recomendada para prevenção contra ransomware?",
-        alternativaA: "Utilizar redes Wi-Fi públicas exclusivamente.",
-        alternativaB: "Desligar o computador após uso.",
-        alternativaC: "Instalar vários antivírus simultaneamente.",
-        alternativaD: "Manter sistemas atualizados e realizar backups regulares.",
-        alternativaCorreta: "alternativaD"
-    },
-    {
-        pergunta: "Anexos maliciosos em e-mails podem ser caracterizados como:",
-        alternativaA: "Fotos e vídeos pessoais compartilhados.",
-        alternativaB: "Arquivos que executam códigos maliciosos ao abrir.",
-        alternativaC: "Atualizações oficiais enviadas por e-mail.",
-        alternativaD: "Documentos legítimos de fontes confiáveis.",
-        alternativaCorreta: "alternativaB"
-    },
-    {
-        pergunta: "Qual a melhor prática para reduzir riscos de abrir anexos maliciosos?",
-        alternativaA: "Usar antivírus atualizado e confirmar origem do remetente.",
-        alternativaB: "Salvar anexos sem escanear.",
-        alternativaC: "Abrir anexos rapidamente para verificação.",
-        alternativaD: "Desativar firewalls para circulação livre de arquivos.",
-        alternativaCorreta: "alternativaA"
-    },
-    {
-        pergunta: "Por que o uso de redes Wi-Fi públicas pode representar risco à segurança?",
-        alternativaA: "Exige autenticação multifator.",
-        alternativaB: "Reduz a velocidade da internet.",
-        alternativaC: "Não permite conexões HTTPS.",
-        alternativaD: "Possibilidade de interceptação e captura de dados.",
-        alternativaCorreta: "alternativaD"
-    },
-    {
-        pergunta: "Qual medida aumenta a segurança ao usar redes Wi-Fi públicas?",
-        alternativaA: "Compartilhar conexão com outros dispositivos.",
-        alternativaB: "Desativar firewall local.",
-        alternativaC: "Evitar autenticação multifator.",
-        alternativaD: "Usar VPN para criptografar tráfego.",
-        alternativaCorreta: "alternativaD"
-    },
-    {
-        pergunta: "O que caracteriza um ataque de roubo de identidade digital?",
-        alternativaA: "Instalação de software de segurança.",
-        alternativaB: "Uso não autorizado de dados pessoais para fraudes.",
-        alternativaC: "Mudança periódica de senhas.",
-        alternativaD: "Envio de notificações legítimas.",
-        alternativaCorreta: "alternativaB"
-    },
-    {
-        pergunta: "Qual ação ajuda a minimizar riscos de roubo de identidade?",
-        alternativaA: "Atualizar dados pessoais em redes sociais.",
-        alternativaB: "Usar mesma senha para várias contas.",
-        alternativaC: "Compartilhar dados apenas em plataformas seguras.",
-        alternativaD: "Enviar dados pessoais por e-mail.",
-        alternativaCorreta: "alternativaC"
-    },
-    {
-        pergunta: "Qual o principal benefício de senhas fortes?",
-        alternativaA: "Aumentar tempo de resposta do sistema.",
-        alternativaB: "Reduzir chances de ataques de força bruta.",
-        alternativaC: "Facilitar acesso legítimo.",
-        alternativaD: "Permitir compartilhamento seguro.",
-        alternativaCorreta: "alternativaB"
-    },
-    {
-        pergunta: "Ao criar senha robusta, deve-se priorizar:",
-        alternativaA: "Nomes ou datas pessoais fáceis.",
-        alternativaB: "Senhas curtas para rapidez.",
-        alternativaC: "Combinação de letras, números e símbolos aleatórios.",
-        alternativaD: "Sequências simples como '123456'.",
-        alternativaCorreta: "alternativaC"
-    },
-    {
-        pergunta: "Por que manter sistemas atualizados é fundamental?",
-        alternativaA: "Acelerar inicialização.",
-        alternativaB: "Corrigir vulnerabilidades exploráveis.",
-        alternativaC: "Evitar notificações do sistema.",
-        alternativaD: "Garantir recursos visuais novos.",
-        alternativaCorreta: "alternativaB"
-    },
-    {
-        pergunta: "O que define backup em segurança da informação?",
-        alternativaA: "Alterar senhas regularmente.",
-        alternativaB: "Exclusão periódica para liberar espaço.",
-        alternativaC: "Desinstalar softwares desnecessários.",
-        alternativaD: "Cópia segura de dados para recuperação.",
-        alternativaCorreta: "alternativaD"
-    }
-];
+        var questoesBasicas = [
+            {
+                pergunta: "No contexto de segurança da informação, qual é a principal característica da engenharia social?",
+                alternativaA: "Ataques automatizados via malware.",
+                alternativaB: "Manipulação psicológica para explorar vulnerabilidades humanas.",
+                alternativaC: "Uso de criptografia para proteger dados.",
+                alternativaD: "Desenvolvimento de firewalls corporativos.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual das funções abaixo melhor descreve o papel de um firewall corporativo?",
+                alternativaA: "Realiza backups automáticos do sistema.",
+                alternativaB: "Controla o fluxo de tráfego baseado em regras de segurança.",
+                alternativaC: "Detecta vulnerabilidades em aplicativos web.",
+                alternativaD: "Garante integridade dos dados em servidores.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "O termo 'Zero Day' refere-se a:",
+                alternativaA: "Atualizações regulares de segurança.",
+                alternativaB: "Um tipo de ataque de negação de serviço.",
+                alternativaC: "Uma vulnerabilidade recém-descoberta, ainda sem correção disponível.",
+                alternativaD: "Um método de autenticação multifator.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Qual a abordagem recomendada para armazenamento seguro de senhas em sistemas modernos?",
+                alternativaA: "Guardar senhas em arquivos criptografados simetricamente.",
+                alternativaB: "Enviar senhas criptografadas por e-mail.",
+                alternativaC: "Uso de hashes criptográficos com salt para dificultar ataques.",
+                alternativaD: "Armazenar senhas em texto simples com backups frequentes.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Autenticação multifator (MFA) combina elementos para aumentar a segurança. Qual das opções NÃO é um fator típico utilizado?",
+                alternativaA: "Algo que você tem (token).",
+                alternativaB: "Algo que você deseja (preferência pessoal).",
+                alternativaC: "Algo que você sabe (senha).",
+                alternativaD: "Algo que você é (biometria).",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual é o principal mecanismo de ataque utilizado em phishing?",
+                alternativaA: "Exploração de protocolos de rede para captura de pacotes.",
+                alternativaB: "Engenharia social para capturar dados em sites falsos.",
+                alternativaC: "Instalação automática de malwares via exploits.",
+                alternativaD: "Ataques de força bruta em sistemas de autenticação.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual das alternativas representa uma consequência direta de um ataque de phishing bem-sucedido?",
+                alternativaA: "Exposição de logs para auditoria.",
+                alternativaB: "Comprometimento de credenciais e possível instalação de malware.",
+                alternativaC: "Aumento da largura de banda.",
+                alternativaD: "Diminuição do desempenho da rede.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual das medidas a seguir é mais eficaz para mitigar ataques de phishing?",
+                alternativaA: "Desabilitar filtros de e-mail.",
+                alternativaB: "Usar redes públicas para acesso remoto.",
+                alternativaC: "Implementar autenticação multifator e treinamentos de conscientização.",
+                alternativaD: "Ignorar atualizações do sistema.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Ransomware é um tipo de malware que:",
+                alternativaA: "Atualiza sistemas automaticamente.",
+                alternativaB: "Desativa firewalls.",
+                alternativaC: "Monitoriza atividades de rede.",
+                alternativaD: "Criptografa arquivos e exige pagamento para liberação.",
+                alternativaCorreta: "alternativaD"
+            },
+            {
+                pergunta: "Qual a estratégia mais recomendada para prevenção contra ransomware?",
+                alternativaA: "Utilizar redes Wi-Fi públicas exclusivamente.",
+                alternativaB: "Desligar o computador após uso.",
+                alternativaC: "Instalar vários antivírus simultaneamente.",
+                alternativaD: "Manter sistemas atualizados e realizar backups regulares.",
+                alternativaCorreta: "alternativaD"
+            },
+            {
+                pergunta: "Anexos maliciosos em e-mails podem ser caracterizados como:",
+                alternativaA: "Fotos e vídeos pessoais compartilhados.",
+                alternativaB: "Arquivos que executam códigos maliciosos ao abrir.",
+                alternativaC: "Atualizações oficiais enviadas por e-mail.",
+                alternativaD: "Documentos legítimos de fontes confiáveis.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual a melhor prática para reduzir riscos de abrir anexos maliciosos?",
+                alternativaA: "Usar antivírus atualizado e confirmar origem do remetente.",
+                alternativaB: "Salvar anexos sem escanear.",
+                alternativaC: "Abrir anexos rapidamente para verificação.",
+                alternativaD: "Desativar firewalls para circulação livre de arquivos.",
+                alternativaCorreta: "alternativaA"
+            },
+            {
+                pergunta: "Por que o uso de redes Wi-Fi públicas pode representar risco à segurança?",
+                alternativaA: "Exige autenticação multifator.",
+                alternativaB: "Reduz a velocidade da internet.",
+                alternativaC: "Não permite conexões HTTPS.",
+                alternativaD: "Possibilidade de interceptação e captura de dados.",
+                alternativaCorreta: "alternativaD"
+            },
+            {
+                pergunta: "Qual medida aumenta a segurança ao usar redes Wi-Fi públicas?",
+                alternativaA: "Compartilhar conexão com outros dispositivos.",
+                alternativaB: "Desativar firewall local.",
+                alternativaC: "Evitar autenticação multifator.",
+                alternativaD: "Usar VPN para criptografar tráfego.",
+                alternativaCorreta: "alternativaD"
+            },
+            {
+                pergunta: "O que caracteriza um ataque de roubo de identidade digital?",
+                alternativaA: "Instalação de software de segurança.",
+                alternativaB: "Uso não autorizado de dados pessoais para fraudes.",
+                alternativaC: "Mudança periódica de senhas.",
+                alternativaD: "Envio de notificações legítimas.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Qual ação ajuda a minimizar riscos de roubo de identidade?",
+                alternativaA: "Atualizar dados pessoais em redes sociais.",
+                alternativaB: "Usar mesma senha para várias contas.",
+                alternativaC: "Compartilhar dados apenas em plataformas seguras.",
+                alternativaD: "Enviar dados pessoais por e-mail.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Qual o principal benefício de senhas fortes?",
+                alternativaA: "Aumentar tempo de resposta do sistema.",
+                alternativaB: "Reduzir chances de ataques de força bruta.",
+                alternativaC: "Facilitar acesso legítimo.",
+                alternativaD: "Permitir compartilhamento seguro.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "Ao criar senha robusta, deve-se priorizar:",
+                alternativaA: "Nomes ou datas pessoais fáceis.",
+                alternativaB: "Senhas curtas para rapidez.",
+                alternativaC: "Combinação de letras, números e símbolos aleatórios.",
+                alternativaD: "Sequências simples como '123456'.",
+                alternativaCorreta: "alternativaC"
+            },
+            {
+                pergunta: "Por que manter sistemas atualizados é fundamental?",
+                alternativaA: "Acelerar inicialização.",
+                alternativaB: "Corrigir vulnerabilidades exploráveis.",
+                alternativaC: "Evitar notificações do sistema.",
+                alternativaD: "Garantir recursos visuais novos.",
+                alternativaCorreta: "alternativaB"
+            },
+            {
+                pergunta: "O que define backup em segurança da informação?",
+                alternativaA: "Alterar senhas regularmente.",
+                alternativaB: "Exclusão periódica para liberar espaço.",
+                alternativaC: "Desinstalar softwares desnecessários.",
+                alternativaD: "Cópia segura de dados para recuperação.",
+                alternativaCorreta: "alternativaD"
+            }
+        ];
 
         for (var i = 0; i < questoesBasicas.length; i++) {
             listaDeQuestoes.push(questoesBasicas[i])
